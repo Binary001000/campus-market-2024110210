@@ -217,4 +217,474 @@ campus-market-seed/
 
 ---
 
+---
+
+## Task 3: 阅读核心代码
+
+### 3.1 阅读 `src/main.ts`
+
+#### 源码
+
+```ts
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')
+```
+
+#### 执行流程图
+
+```
+createApp(App)           →  创建 Vue 应用实例，指定 App.vue 为根组件
+       │
+       ▼
+app.use(createPinia())   →  注册 Pinia 插件，全局状态管理能力就绪
+       │
+       ▼
+app.use(router)          →  注册 Vue Router 插件，页面路由能力就绪
+       │
+       ▼
+app.mount('#app')        →  挂载到 index.html 中的 <div id="app">
+                            Vue 接管该 DOM 节点，应用开始运行
+```
+
+#### 思考
+
+**Q1: Vue 应用如何创建？**
+
+通过 `createApp(App)` 创建应用实例。`createApp` 是 Vue 3 的工厂函数，接收一个根组件（`App.vue`）作为参数，返回一个 Vue 应用实例。这个实例是 Vue 应用的"根"，后续所有插件、组件都挂载在它上面。
+
+**Q2: Pinia 如何注册？**
+
+通过 `app.use(createPinia())` 注册：
+- `createPinia()` 创建 Pinia 实例
+- `app.use()` 是 Vue 的插件安装方法，将 Pinia 注入整个应用
+- 注册后，所有组件内都可以通过 `useXxxStore()` 访问 Pinia Store
+
+**Q3: Router 如何注册？**
+
+通过 `app.use(router)` 注册：
+- `router` 是从 `./router/index.ts` 导入的已配置好的 Router 实例
+- 同样是插件模式——`app.use()` 将 Router 注入整个应用
+- 注册后，所有组件内可通过 `useRouter()` / `useRoute()` 访问路由功能
+
+**Q4: 项目入口在哪里？**
+
+整个入口链条为：
+
+```
+index.html 中的 <script type="module" src="/src/main.ts">
+       │
+       ▼
+src/main.ts            ← JavaScript/TypeScript 逻辑入口
+       │
+       ▼
+src/App.vue            ← 根组件（UI 入口）
+       │
+       ▼
+<RouterView />         ← 路由视图，渲染当前 URL 对应的页面组件
+```
+
+> `index.html` 是 Vite 的物理入口，`main.ts` 是 JS 逻辑入口，`App.vue` 是组件树的根。
+
+---
+
+### 3.2 阅读 `src/router/index.ts`
+
+#### 源码
+
+```ts
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '@/views/HomeView.vue'
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: HomeView,
+    },
+  ],
+})
+
+export default router
+```
+
+#### 路由配置解析
+
+| 配置项 | 值 | 说明 |
+| ------ | --- | ---- |
+| `history` | `createWebHistory(…)` | 使用 HTML5 History 模式，URL 干净无 `#` 号 |
+| `path: '/'` | 根路径 | 匹配 `http://localhost:5173/` |
+| `name: 'home'` | 命名路由 | 可通过名称跳转，而非硬编码路径 |
+| `component` | `HomeView` | 指定渲染的视图组件 |
+
+#### 思考
+
+**Q1: Router 的作用是什么？**
+
+Vue Router 是 Vue 3 的官方路由管理器，核心作用：
+
+- **URL ↔ 视图映射**：根据浏览器 URL 决定显示哪个页面组件，无需刷新页面（SPA 单页应用的核心）
+- **页面导航**：提供 `<RouterLink>` 和 `router.push()` 等 API 实现页面跳转
+- **历史管理**：通过 `createWebHistory` 利用浏览器 History API，支持前进/后退
+- **代码分割**：结合 `import()` 动态导入，实现按路由懒加载，减小首屏体积
+
+**Q2: 为什么首页能够显示？**
+
+三个环节共同作用：
+
+```
+1. 路由匹配
+   URL: http://localhost:5173/
+   路由表: { path: '/', component: HomeView }
+   → '/' 匹配成功，Router 决定渲染 HomeView
+
+2. App.vue 提供插槽
+   <RouterView />  ← 路由匹配到的组件会被渲染到这里
+
+3. 浏览器访问
+   用户打开 http://localhost:5173/
+   → Vite 返回 index.html
+   → 加载 main.ts → 创建 App → 注册 Router
+   → Router 解析当前 URL '/' → 匹配 HomeView
+   → HomeView 渲染到 <RouterView /> 位置
+   → 页面显示 "项目启动成功"
+```
+
+> 当前项目只有 `/` 一个路由，访问任何未匹配路径都不会显示内容（后续需要添加 404 页面）。
+
+---
+
+### 3.3 阅读 `src/App.vue`
+
+#### 源码
+
+```html
+<script setup lang="ts"></script>
+
+<template>
+  <main class="app">
+    <h1>校园轻集市</h1>
+    <p>AI 辅助前端工程实践种子项目</p>
+    <RouterView />
+  </main>
+</template>
+
+<style scoped>
+.app {
+  padding: 32px;
+}
+</style>
+```
+
+#### 结构分析
+
+| 区块 | 内容 | 作用 |
+| ---- | ---- | ---- |
+| `<script setup>` | （空） | 组件逻辑（当前无逻辑，后续可在此引入状态、API 等） |
+| `<template>` | `<h1>` + `<p>` + `<RouterView />` | 页面骨架：标题栏 + 路由视图插槽 |
+| `<style scoped>` | `padding: 32px` | scoped 样式，`scoped` 确保只作用于本组件 |
+
+#### 思考
+
+**Q: App.vue 在整个项目中的作用是什么？**
+
+`App.vue` 是 Vue 应用的**根组件**，扮演着整个应用的**布局骨架**角色：
+
+| 角色 | 说明 |
+| ---- | ---- |
+| 🏗️ **组件树根节点** | 所有页面和组件都是 App.vue 的子节点，它是整个组件树的起点 |
+| 🖼️ **全局布局框架** | 提供应用级的外壳（标题 "校园轻集市"、全局样式等），这些内容在所有页面上都可见 |
+| 🔌 **路由插槽** | `<RouterView />` 是核心——它是一个占位符，当前 URL 匹配到的页面组件会动态渲染到这个位置 |
+| 📦 **全局提供者** | 后续可在此层注入全局数据、主题、对话框等——所有子组件都能访问 |
+| 🎨 **全局样式基准** | 在此处定义的全局类（如 `.app`）可作为全应用的布局基准 |
+
+#### 页面渲染模型
+
+```
+┌──────────────────────────────────┐
+│  App.vue                         │
+│  ┌────────────────────────────┐  │
+│  │  <h1>校园轻集市</h1>       │  │  ← 全局：所有页面都显示
+│  │  <p>种子项目</p>            │  │  ← 全局：所有页面都显示
+│  │  ┌──────────────────────┐  │  │
+│  │  │  <RouterView />      │  │  │  ← 动态：根据 URL 切换
+│  │  │  ┌────────────────┐  │  │  │
+│  │  │  │  HomeView      │  │  │  │  ← URL = '/' 时渲染
+│  │  │  │  项目启动成功   │  │  │  │
+│  │  │  └────────────────┘  │  │  │
+│  │  │  或                  │  │  │
+│  │  │  ┌────────────────┐  │  │  │
+│  │  │  │  其他页面组件   │  │  │  │  ← URL 变化时切换
+│  │  │  └────────────────┘  │  │  │
+│  │  └──────────────────────┘  │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+```
+
+---
+
+## Day 1 总结
+
+通过今天三个 Task 的学习，完成了对校园轻集市项目的**全景认知**：
+
+| Task | 核心收获 |
+| ---- | -------- |
+| Task 1 项目背景理解 | 明确了"做什么"——校园二手交易平台，7 天完成 Vue 3 前端开发 |
+| Task 2 目录结构分析 | 明确了"哪里做"——核心在 `src/` 的 5 个目录，其余是基础设施 |
+| Task 3 核心代码阅读 | 明确了"怎么跑起来的"——`main.ts` 创建实例 → 注册插件 → 挂载，`RouterView` 驱动页面切换 |
+
+**下一步（Day 2 预告）**：页面结构与路由设计——开始往 `src/views/` 和 `src/router/` 中添加新页面。
+
+---
+
+---
+
+## Task 4: AI 协作体验
+
+### 📝 Prompt（向 AI 提出的问题）
+
+```
+请 AI 完成以下分析任务：
+
+1. 分析项目目录结构 — 说明每个目录和关键文件的职责
+2. 解释 main.ts — Vue 应用的创建流程
+3. 解释 Router 的作用 — 以及首页为什么能显示
+4. 分析当前项目采用的技术栈 — 列出所有技术及其在项目中的角色
+```
+
+---
+
+### 🤖 AI 输出
+
+#### 1. 项目目录结构分析
+
+```
+campus-market-seed/
+│
+├── 📄 工程化配置文件（根目录） — 课程基础设施，统一开发基线
+│   ├── package.json          → 项目元信息、依赖声明、npm scripts（dev/build/lint）
+│   ├── vite.config.ts        → Vite 构建配置，定义插件和 @ 路径别名
+│   ├── tsconfig*.json        → TypeScript 编译选项（分 app 和 node 两端）
+│   ├── eslint.config.ts      → ESLint 代码规范（变量命名、未使用变量等）
+│   ├── .oxlintrc.json        → Oxlint 快速检查（比 ESLint 更快）
+│   ├── .editorconfig         → 编辑器格式统一（2空格缩进、UTF-8、LF换行）
+│   ├── .nvmrc                → Node.js 版本声明 → 24.12.0
+│   ├── .gitignore            → Git 忽略规则（node_modules、dist、.env等）
+│   ├── env.d.ts              → Vite 客户端 TypeScript 类型声明
+│   └── index.html            → SPA 的 HTML 入口，Vite 构建的挂载点
+│
+├── 📁 src/ — ⭐ 核心开发目录，所有业务代码在此编写
+│   ├── api/                  → API 接口层：封装 HTTP 请求，与后端通信
+│   ├── components/           → 可复用组件：跨页面共享的 UI 组件
+│   ├── router/               → 路由配置：URL ↔ 页面组件的映射关系
+│   ├── stores/               → 状态管理：Pinia Store，管理全局共享数据
+│   ├── views/                → 页面视图：每个路由对应的顶层页面组件
+│   ├── App.vue               → 根组件：全局布局骨架 + <RouterView /> 插槽
+│   └── main.ts               → 应用入口：创建实例 → 注册插件 → 挂载 DOM
+│
+├── 📁 docs/ — 课程文档
+│   ├── guide/                → 学生使用指南（环境配置、快速开始）
+│   ├── evidence/             → 每日过程性证据模板（Day1~Day7）
+│   └── ai/                   → AI 协作记录规范
+│
+├── 📁 public/                → 静态资源，直接复制到构建输出
+├── 📁 scripts/               → 自动检测工具（Check Engine，后续启用）
+└── 📁 .vscode/               → VS Code 工作区推荐配置
+```
+
+**设计思想**：按功能职责分层，遵循 Vue 3 生态约定。`api/`、`components/`、`stores/`、`views/`、`router/` 各司其职，修改一层不影响其他层。项目初期精简，后续可按需扩展 `utils/`、`hooks/`、`types/` 等。
+
+---
+
+#### 2. 解释 main.ts — Vue 应用创建流程
+
+```ts
+import { createApp } from 'vue'       // ① 导入 Vue 3 的 createApp 工厂函数
+import { createPinia } from 'pinia'   // ② 导入 Pinia 的 createPinia 工厂函数
+
+import App from './App.vue'           // ③ 导入根组件
+import router from './router'         // ④ 导入已配置好的路由实例
+
+const app = createApp(App)            // ⑤ 创建 Vue 应用实例
+
+app.use(createPinia())                // ⑥ 安装 Pinia 插件（全局状态管理）
+app.use(router)                       // ⑦ 安装 Router 插件（页面路由）
+
+app.mount('#app')                     // ⑧ 挂载到 DOM，接管 <div id="app">
+```
+
+**执行链条**：
+
+```
+createApp(App)           →  第 5 行：以 App.vue 为根组件创建 Vue 应用实例
+       │                    此时应用尚未激活，组件不会渲染
+       ▼
+app.use(createPinia())   →  第 6 行：Pinia 是 Vue 的插件，通过 use() 安装
+       │                    安装后，所有组件可通过 useXxxStore() 访问 Store
+       ▼
+app.use(router)          →  第 7 行：Router 同样是 Vue 插件
+       │                    安装后，<RouterView> 和 useRouter() 才能工作
+       ▼
+app.mount('#app')        →  第 8 行：真正的启动点！
+                             Vue 找到 index.html 中的 <div id="app">
+                             将 App.vue 的模板渲染进去
+                             此时应用开始运行，页面可见
+```
+
+> **关键理解**：在 `mount()` 调用之前，所有 `use()` 只是"注册"插件，不会触发渲染。`mount()` 是最后一步，触发整个组件树的首次渲染。
+
+---
+
+#### 3. 解释 Router 的作用
+
+Vue Router 的核心职责是**实现 URL 与页面视图的映射**，让单页应用（SPA）拥有多页面般的导航体验。
+
+**三大核心作用**：
+
+| 作用 | 说明 | 对应 API |
+|------|------|----------|
+| 🗺️ **路由映射** | 定义 URL 路径和页面组件的一一对应关系 | `routes: [{ path: '/', component: HomeView }]` |
+| 🧭 **页面导航** | 不刷新浏览器实现页面跳转 | `<RouterLink>` 或 `router.push()` |
+| 🪟 **视图渲染** | 在指定位置动态渲染当前匹配的组件 | `<RouterView />` |
+
+**首页为什么能显示？完整流程**：
+
+```
+浏览器输入 http://localhost:5173/
+        │
+        ▼
+Vite 开发服务器 返回 index.html
+        │
+        ▼
+浏览器加载 <script src="/src/main.ts">
+        │
+        ▼
+main.ts: createApp(App) → use(router) → mount('#app')
+        │
+        ▼
+Router 解析当前 URL 路径 → '/'
+        │
+        ▼
+遍历路由表 → 匹配 { path: '/', name: 'home', component: HomeView }
+        │
+        ▼
+将 HomeView 组件渲染到 App.vue 中的 <RouterView /> 位置
+        │
+        ▼
+用户看到 → "校园轻集市" + "项目启动成功"
+```
+
+> 当前只有 `/` 一个路由。访问任何不匹配的路径，`<RouterView />` 中为空——后续需添加通配路由（404 页面）处理未匹配路径。
+
+**路由模式对比**：
+
+| 模式 | URL 示例 | 特点 |
+|------|---------|------|
+| `createWebHistory` ✅ | `http://localhost:5173/product/123` | HTML5 History API，URL 干净美观，需服务器配合 |
+| `createWebHashHistory` | `http://localhost:5173/#/product/123` | Hash 模式，兼容性好，无需服务器配置 |
+
+当前项目使用 `createWebHistory`。
+
+---
+
+#### 4. 当前项目技术栈分析
+
+**运行时依赖（生产环境）**：
+
+| 技术 | 版本 | 在项目中的角色 |
+|------|------|--------------|
+| **Vue 3** | ^3.5.38 | 🏗️ 核心框架 — 响应式 UI、组件系统、Composition API |
+| **Vue Router** | ^5.1.0 | 🧭 路由管理 — URL ↔ 页面映射、SPA 导航 |
+| **Pinia** | ^3.0.4 | 📦 状态管理 — 全局数据共享（用户信息、商品列表等） |
+| **TypeScript** | ~6.0.0 | 🔒 类型系统 — 编译时类型检查、代码提示、重构支持 |
+
+**开发依赖（仅开发环境）**：
+
+| 技术 | 版本 | 在项目中的角色 |
+|------|------|--------------|
+| **Vite** | ^8.0.16 | ⚡ 构建工具 — 极速冷启动、HMR 热更新、生产打包 |
+| **ESLint** | ^10.5.0 | ✅ 代码规范检查 — 变量命名、未使用变量、类型错误 |
+| **Oxlint** | ~1.69.0 | 🚀 快速 Lint — 比 ESLint 快 50-100 倍的补充检查 |
+| **vue-tsc** | ^3.3.5 | 🔍 Vue 模板类型检查 — 验证 template 中的 TypeScript 类型 |
+| **Vite Plugin Vue** | ^6.0.7 | 🔌 Vite 的 Vue SFC 编译插件（解析 .vue 单文件组件） |
+| **Vue DevTools** | ^8.1.2 | 🛠️ 浏览器开发者工具集成 |
+
+**工具链（不在 package.json 中，但属于项目设施）**：
+
+| 工具 | 用途 |
+|------|------|
+| **nvm** | Node.js 版本管理器，确保全员使用 24.12.0 |
+| **pnpm** | 快速、节省磁盘的包管理器，通过 `packageManager` 字段锁定 11.9.0 |
+| **Corepack** | Node.js 内置的包管理器启用工具，自动使用项目指定的 pnpm 版本 |
+| **Git** | 版本管理，记录开发过程 |
+
+**技术栈架构图**：
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    浏览器 / 用户                      │
+├─────────────────────────────────────────────────────┤
+│  Vue 3 (UI 框架)                                     │
+│  ├── Vue Router (页面导航)                           │
+│  ├── Pinia (全局状态)                                │
+│  └── 自定义组件 (components/ + views/)               │
+├─────────────────────────────────────────────────────┤
+│  TypeScript (类型安全层)                              │
+├─────────────────────────────────────────────────────┤
+│  Vite (构建工具层)                                    │
+│  ├── 开发服务器 (HMR 热更新)                         │
+│  ├── 生产构建 (Rollup 打包)                          │
+│  └── 插件系统 (Vue SFC 编译、DevTools)               │
+├─────────────────────────────────────────────────────┤
+│  质量保障层                                          │
+│  ├── ESLint (代码规范)                               │
+│  ├── Oxlint (快速检查)                               │
+│  └── vue-tsc (模板类型检查)                          │
+├─────────────────────────────────────────────────────┤
+│  基础设施                                            │
+│  ├── Node.js 24.12.0 (运行时)                        │
+│  ├── pnpm 11.9.0 (包管理)                            │
+│  └── Git (版本管理)                                  │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+### ✍️ 自己的理解
+
+> *（请在此处用自己的语言总结：你从以上 AI 分析中学到了什么？哪些概念之前不清楚现在清楚了？哪些地方还需要进一步学习？）*
+
+| 知识点 | 我之前的理解 | 现在的理解 |
+|--------|------------|----------|
+| `createApp().use().mount()` 链式调用 | | |
+| `<RouterView />` 的工作原理 | | |
+| 项目目录为什么这样分 | | |
+| 技术栈各层的分工 | | |
+| …… | | |
+
+---
+
+### 🎯 最终结论
+
+> *（请在此处总结：通过本次 AI 协作，你获得了哪些关键认识？对你后续的开发有什么帮助？）*
+
+*示例框架（请用自己的话改写）：*
+- 整个项目是"配置驱动 + 分层开发"的模式：基础设施由仓库提供，我只需在 `src/` 中编写业务代码
+- `main.ts` 像一个装配流水线：创建应用 → 安装插件 → 挂载到页面，顺序不能乱
+- Router 是 SPA 的灵魂——所有页面切换本质上是 `<RouterView />` 内组件的切换
+- 技术栈从底向上分为基础设施层、构建层、类型层、框架层，各层独立且各司其职
+
+---
+
 **填写日期**：2026-06-27
