@@ -700,3 +700,34 @@ AI 重写 ProfileView.vue：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 16 — Day 2 UI 重设计 Prompt 8: 看板页
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+【看板页 UI 重设计】
+CSS环形图+柱状图+TOP5+el-timeline+安全提醒
+```
+
+---
+
+### AI 输出概要
+
+AI 重写 BoardView.vue：时间选择(今日/本周/本月)、4统计卡片+趋势%、CSS conic-gradient环形图+水平柱状图、TOP5金银铜排名+el-timeline、安全提醒#FFFBEB卡片。
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+> **
+
+---
+
+### 最终验证
+
+> **
