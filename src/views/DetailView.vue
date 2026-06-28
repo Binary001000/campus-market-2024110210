@@ -4,7 +4,6 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const itemId = route.params.id as string
 
-// 模拟详情数据（按 id 匹配）
 const itemMap: Record<string, { title: string; price: number; category: string; desc: string; seller: string; time: string }> = {
   '1': { title: '《数据结构》教材 9成新', price: 25, category: '教材教辅', desc: '数据结构教材，几乎全新，仅有少量笔记。适合计算机专业同学使用。', seller: '计算机学院 张同学', time: '2026-06-28' },
   '2': { title: '机械键盘 Cherry 青轴', price: 180, category: '电子产品', desc: 'Cherry 青轴机械键盘，87键，使用半年，手感很好，配件齐全。', seller: '信息学院 李同学', time: '2026-06-27' },
@@ -17,59 +16,68 @@ const itemMap: Record<string, { title: string; price: number; category: string; 
 }
 
 const item = itemMap[itemId]
+
+const categoryType = (cat: string): '' | 'success' | 'warning' | 'danger' | 'info' => {
+  const map: Record<string, '' | 'success' | 'warning' | 'danger' | 'info'> = {
+    '教材教辅': '',
+    '电子产品': 'success',
+    '生活用品': 'warning',
+    '运动户外': 'danger',
+  }
+  return map[cat] || ''
+}
 </script>
 
 <template>
   <div class="detail-page">
-    <RouterLink to="/list" class="back-link">← 返回列表</RouterLink>
+    <el-button text @click="$router.push('/list')">← 返回列表</el-button>
 
-    <div v-if="item" class="detail-card">
+    <el-card v-if="item" class="detail-card">
       <h2>{{ item.title }}</h2>
       <div class="detail-meta">
-        <span class="tag">{{ item.category }}</span>
+        <el-tag :type="categoryType(item.category)" size="small">{{ item.category }}</el-tag>
         <span>发布于 {{ item.time }}</span>
       </div>
       <div class="detail-price">¥{{ item.price }}</div>
+
+      <el-divider />
+
       <div class="detail-section">
-        <h3>商品描述</h3>
+        <h4>商品描述</h4>
         <p>{{ item.desc }}</p>
       </div>
+
+      <el-divider />
+
       <div class="detail-section">
-        <h3>卖家信息</h3>
+        <h4>卖家信息</h4>
         <p>{{ item.seller }}</p>
       </div>
-      <div class="detail-id">商品编号：{{ itemId }}</div>
-    </div>
 
-    <div v-else class="empty">
-      <p>商品不存在</p>
-      <RouterLink to="/list">返回列表</RouterLink>
-    </div>
+      <el-divider />
+
+      <div class="detail-footer">
+        <span class="detail-id">商品编号：{{ itemId }}</span>
+        <el-button type="primary">联系卖家</el-button>
+      </div>
+    </el-card>
+
+    <el-result
+      v-else
+      icon="warning"
+      title="商品不存在"
+      sub-title="该商品可能已下架或删除"
+    >
+      <template #extra>
+        <el-button type="primary" @click="$router.push('/list')">返回列表</el-button>
+      </template>
+    </el-result>
   </div>
 </template>
 
 <style scoped>
 .detail-page {
-  max-width: 640px;
-}
-
-.back-link {
-  display: inline-block;
-  margin-bottom: 16px;
-  color: #1890ff;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.back-link:hover {
-  text-decoration: underline;
-}
-
-.detail-card {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 8px;
-  padding: 24px;
+  max-width: 680px;
 }
 
 .detail-card h2 {
@@ -82,53 +90,41 @@ const item = itemMap[itemId]
   align-items: center;
   gap: 12px;
   font-size: 13px;
-  color: #999;
-  margin-bottom: 16px;
-}
-
-.tag {
-  background: #f0f5ff;
-  color: #1890ff;
-  padding: 2px 10px;
-  border-radius: 4px;
-  font-size: 12px;
+  color: #909399;
+  margin-bottom: 12px;
 }
 
 .detail-price {
   font-size: 28px;
   font-weight: 700;
-  color: #ff4d4f;
-  margin-bottom: 20px;
+  color: #f56c6c;
 }
 
 .detail-section {
-  margin-bottom: 16px;
+  margin: 4px 0;
 }
 
-.detail-section h3 {
+.detail-section h4 {
   font-size: 14px;
-  color: #999;
+  color: #909399;
   margin: 0 0 6px;
 }
 
 .detail-section p {
   font-size: 15px;
-  color: #333;
+  color: #303133;
   margin: 0;
   line-height: 1.6;
 }
 
-.detail-id {
-  margin-top: 20px;
-  padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
-  font-size: 12px;
-  color: #ccc;
+.detail-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.empty {
-  text-align: center;
-  padding: 48px;
-  color: #999;
+.detail-id {
+  font-size: 12px;
+  color: #c0c4cc;
 }
 </style>

@@ -1,48 +1,55 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const activeIndex = ref('/home')
+</script>
 
 <template>
   <main class="app">
     <h1>校园轻集市</h1>
     <p>AI 辅助前端工程实践种子项目</p>
 
-    <nav class="nav">
-      <RouterLink to="/home">首页</RouterLink>
-      <RouterLink to="/list">列表</RouterLink>
-      <RouterLink to="/publish">发布</RouterLink>
-      <RouterLink to="/message">消息</RouterLink>
-      <RouterLink to="/profile">我的</RouterLink>
-    </nav>
+    <el-menu
+      :default-active="activeIndex"
+      mode="horizontal"
+      :ellipsis="false"
+      router
+      class="nav-menu"
+    >
+      <el-menu-item index="/home">首页</el-menu-item>
+      <el-menu-item index="/list">列表</el-menu-item>
+      <el-menu-item index="/publish">发布</el-menu-item>
+      <el-menu-item index="/message">消息</el-menu-item>
+      <el-menu-item index="/profile">我的</el-menu-item>
+      <el-menu-item index="/board">看板</el-menu-item>
+    </el-menu>
 
-    <RouterView />
+    <div class="page-content">
+      <RouterView />
+    </div>
   </main>
 </template>
 
 <style scoped>
 .app {
-  padding: 32px;
+  padding: 0;
 }
 
-.nav {
-  display: flex;
-  gap: 16px;
-  margin: 16px 0;
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
+.app h1,
+.app > p {
+  padding: 0 32px;
 }
 
-.nav a {
-  text-decoration: none;
-  color: #333;
-  padding: 4px 8px;
-  border-radius: 4px;
+.app > p {
+  color: #999;
+  margin-bottom: 8px;
 }
 
-.nav a:hover {
-  background: #f0f0f0;
+.nav-menu {
+  margin-bottom: 24px;
 }
 
-.nav a.router-link-active {
-  color: #1890ff;
-  font-weight: bold;
+.page-content {
+  padding: 0 32px 32px;
 }
 </style>

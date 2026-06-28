@@ -292,3 +292,47 @@ AI 修改了三个文件实现完整的列表→详情跳转链路：
 ### 最终验证
 
 > *（请在此处记录：验证结果——AI 的说法是否正确？你的项目是否能正常运行？）*
+
+---
+
+## 协作记录 7 — Day 2 进阶任务 3: UI 优化（Element Plus）
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+3. UI 优化（Element Plus）
+如果项目已安装 Element Plus：
+● 可使用 <el-menu>
+● 可优化导航栏
+否则使用原生 HTML 即可
+```
+
+---
+
+### AI 输出概要
+
+AI 先确认 Element Plus 2.14.2 已安装，然后进行全局 UI 升级：
+
+- **main.ts**：注册 `ElementPlus` 和 CSS
+- **App.vue**：导航栏从原生 `<nav>` 换为 `<el-menu mode="horizontal" router>`，自动高亮当前路由，新增看板入口
+- **BoardView.vue**：`<el-row>` + `<el-col>` 栅格，`<el-card shadow="hover">` 卡片，`<el-tag>` 分类着色
+- **ListView.vue**：`<el-card shadow="hover">` 商品卡片，`<el-tag>` 分类标签
+- **DetailView.vue**：`<el-card>` + `<el-tag>` + `<el-button>` + `<el-divider>` + `<el-result>`（商品不存在时）
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+---
+
+### 自己修改
+
+> *（请在此处记录：你对 AI 输出做了哪些验证、修正或补充？）*
+
+---
+
+### 最终验证
+
+> *（请在此处记录：验证结果——AI 的说法是否正确？你的项目是否能正常运行？）*

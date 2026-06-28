@@ -265,3 +265,55 @@
 > 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 6
 
 ---
+
+## 进阶任务 3: UI 优化（Element Plus）
+
+### 注册 Element Plus
+
+在 `main.ts` 中全局注册 Element Plus 2.14.2：
+
+```ts
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+app.use(ElementPlus)
+```
+
+### 优化清单
+
+| 文件 | 使用的 Element Plus 组件 | 说明 |
+|------|------------------------|------|
+| [src/main.ts](src/main.ts) | — | 注册 Element Plus |
+| [src/App.vue](src/App.vue) | `<el-menu>` + `<el-menu-item>` | 水平导航栏，`router` 模式集成 Vue Router，自动高亮当前路由；新增看板入口 |
+| [src/views/BoardView.vue](src/views/BoardView.vue) | `<el-row>` `<el-col>` `<el-card>` `<el-tag>` | 响应式栅格布局，卡片阴影悬浮效果，分类标签着色 |
+| [src/views/ListView.vue](src/views/ListView.vue) | `<el-card>` `<el-tag>` | 商品卡片悬浮效果，分类标签颜色区分 |
+| [src/views/DetailView.vue](src/views/DetailView.vue) | `<el-card>` `<el-tag>` `<el-button>` `<el-divider>` `<el-result>` | 详情卡片、分隔线、联系卖家按钮、商品不存在结果页 |
+
+### 导航栏对比
+
+| 维度 | 优化前 | 优化后 |
+|------|--------|--------|
+| 组件 | 原生 `<nav>` + `<RouterLink>` | `<el-menu mode="horizontal" router>` |
+| 高亮 | 手动 CSS `router-link-active` | Element Plus 内置 `default-active` |
+| 入口数 | 5 个 | 6 个（新增看板） |
+| 样式 | 手写 30+ 行 CSS | Element Plus 默认主题 |
+| 响应式 | 无 | el-menu 内置折叠 |
+
+### 验证
+
+执行 `vue-tsc --noEmit` 类型检查，无错误输出。
+
+---
+
+### 遇到的问题
+
+| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
+|:----:|---------|------|---------|:----:|
+| — | 暂无 | — | — | — |
+
+---
+
+### AI 协作记录
+
+> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 7
+
+---
