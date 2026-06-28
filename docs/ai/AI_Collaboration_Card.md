@@ -807,3 +807,44 @@ AI 在 App.vue 全局样式中添加：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 19 — Day 2 UI 重设计 Prompt 11: 响应式适配
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+【响应式适配】
+断点: Desktop>=1024px, Tablet 768-1023px, Mobile<768px
+Mobile: 导航图标化+隐藏文字、统计4→2列、双栏→单列、筛选垂直堆叠、
+详情左右→上下、消息单列、padding 24→12px
+```
+
+---
+
+### AI 输出概要
+
+AI 在 App.vue 全局样式中添加 @media 查询：
+
+- **Tablet(<1024px)**：导航项间距减小、字号13px、内容区padding 16px
+- **Mobile(<768px)**：导航文字隐藏仅图标、logo字号15px、用户昵称隐藏、内容padding 12px
+- **Grid覆盖**：stat-grid/entry-grid 4→2列、feed-section/chart-row/message-layout双栏→单列
+- **筛选栏**：filter-row flex-direction:column、filter-search/filter-select 100%宽
+- **详情页**：main-layout flex-direction:column、main-thumb 100%宽+200px高
+- **卡片**：圆角12px→8px
+- **消息页**：高度 calc(100vh-100px)
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+> **
+
+---
+
+### 最终验证
+
+> **

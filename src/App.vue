@@ -164,6 +164,137 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+
+/* ===== 响应式适配 ===== */
+
+/* Tablet: 768px - 1023px */
+@media (max-width: 1023px) {
+  .nav-center {
+    gap: 0;
+  }
+
+  .nav-item {
+    padding: 8px 10px;
+    font-size: 13px;
+    gap: 4px;
+  }
+
+  .nav-item-icon {
+    font-size: 14px;
+  }
+
+  .nav-item-label {
+    font-size: 13px;
+  }
+
+  .page-content {
+    padding: 16px;
+  }
+}
+
+/* Mobile: < 768px */
+@media (max-width: 767px) {
+  /* 导航栏简化 */
+  .nav-bar {
+    height: 48px;
+  }
+
+  .nav-inner {
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .logo-text {
+    font-size: 15px;
+  }
+
+  .logo-icon {
+    font-size: 20px;
+  }
+
+  /* 隐藏导航文字，仅显示图标 */
+  .nav-item {
+    padding: 6px 10px;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .nav-item-label {
+    display: none;
+  }
+
+  .nav-item-icon {
+    font-size: 18px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  /* 内容区 */
+  .page-content {
+    padding: 12px;
+    max-width: 100%;
+  }
+
+  /* 统计卡片：4→2列 */
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* 业务入口：4→2列 */
+  .entry-grid,
+  .type-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* 双栏布局：并排→上下 */
+  .feed-section,
+  .chart-row,
+  .message-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 消息页单列 */
+  .message-layout {
+    height: calc(100vh - 100px) !important;
+  }
+
+  /* 卡片圆角减小 */
+  .el-card {
+    border-radius: 8px !important;
+  }
+
+  /* 筛选栏垂直堆叠 */
+  .filter-row {
+    flex-direction: column !important;
+  }
+
+  .filter-search {
+    width: 100% !important;
+  }
+
+  .filter-select,
+  .filter-select-sort {
+    width: 100% !important;
+  }
+
+  /* 详情页图片缩小 */
+  .main-layout {
+    flex-direction: column !important;
+  }
+
+  .main-thumb {
+    width: 100% !important;
+    height: 200px !important;
+  }
+}
 </style>
 
 <style scoped>
