@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-const activeIndex = ref('/home')
+const route = useRoute()
+const activeIndex = computed(() => route.path)
 </script>
 
 <template>

@@ -44,6 +44,11 @@ const router = createRouter({
       name: 'Board',
       component: () => import('../views/BoardView.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('../views/NotFoundView.vue'),
+    },
   ],
 })
 

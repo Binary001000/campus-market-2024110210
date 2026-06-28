@@ -317,3 +317,62 @@ app.use(ElementPlus)
 > 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 7
 
 ---
+
+## Day 2 补充任务: 页面完善与路由增强
+
+对照《实训计划》Day 2 验收标准，完成 6 项补充优化。
+
+### 修改文件
+
+| # | 文件 | 变更 | 说明 |
+|:--|------|------|------|
+| 1 | [HomeView.vue](src/views/HomeView.vue) | 重写 | 欢迎区 + 4 类业务入口卡片 + 我的数据统计 + 最新发布列表 + 快捷入口 |
+| 2 | [PublishView.vue](src/views/PublishView.vue) | 重写 | 信息类型选择（el-radio-button 四选一）+ 通用字段 + 类型专属动态字段 + 表单操作栏 |
+| 3 | [MessageView.vue](src/views/MessageView.vue) | 重写 | 左右双栏布局：会话列表 + 聊天区（气泡消息 + 输入框）+ 未读角标 |
+| 4 | [ProfileView.vue](src/views/ProfileView.vue) | 重写 | 用户资料卡片（学院/校区/角色/信用分）+ el-tabs 切换我的发布/我的收藏 + 状态更新入口 |
+| 5 | [App.vue](src/App.vue) | 修改 | `activeIndex` 从硬编码 `ref('/home')` → `useRoute()` 动态计算，任何 URL 进入导航高亮均正确 |
+| 6 | [NotFoundView.vue](src/views/NotFoundView.vue) | 新建 | `el-result` 404 提示 + 返回首页按钮 |
+| 7 | [index.ts](src/router/index.ts) | 修改 | 新增通配路由 `/:pathMatch(.*)*` → NotFoundView |
+
+### 各页面使用的 Element Plus 组件
+
+| 页面 | 组件 |
+|------|------|
+| HomeView | `el-row` `el-col` `el-card` `el-tag` `el-badge` `el-button` |
+| PublishView | `el-card` `el-radio-group` `el-radio-button` `el-input` `el-select` `el-input-number` `el-switch` `el-divider` `el-button` |
+| MessageView | `el-badge` `el-input` `el-button` |
+| ProfileView | `el-card` `el-tabs` `el-tab-pane` `el-tag` `el-empty` `el-button` |
+| NotFoundView | `el-result` `el-button` |
+
+### Day 2 验收标准对照
+
+| 标准 | 状态 |
+|------|:--:|
+| 能通过导航访问所有主要页面 | ✅ |
+| 页面刷新后无明显报错 | ✅ |
+| 首页展示四类业务入口 | ✅ |
+| 列表页展示静态信息卡片结构 | ✅ |
+| 发布页/消息页/个人中心/看板页具备基本框架 | ✅ |
+| 404 页面 | ✅ |
+| 导航高亮同步 | ✅ |
+
+### 验证
+
+执行 `vue-tsc --noEmit` 类型检查，无错误输出。
+
+---
+
+### 遇到的问题
+
+| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
+|:----:|---------|------|---------|:----:|
+| 1 | MessageView / ProfileView 中 `ref` 报错 | 初次写入时未 import `ref` | 补充 `import { ref } from 'vue'` | ✅ 已解决 |
+| 2 | App.vue `activeIndex` 切换路由后高亮不更新 | 硬编码 `ref('/home')` 只在初始化时设定 | 改用 `useRoute()` + `computed(() => route.path)` 动态绑定 | ✅ 已解决 |
+
+---
+
+### AI 协作记录
+
+> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 8
+
+---
