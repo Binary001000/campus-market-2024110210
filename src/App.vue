@@ -59,12 +59,14 @@ const isActive = (path: string) => {
       </div>
     </header>
 
-    <!-- 页面内容（KeepAlive 缓存组件状态，返回时不丢失筛选/分页） -->
+    <!-- 页面内容（KeepAlive 缓存 + 路由过渡动画） -->
     <main class="page-content">
-      <RouterView v-slot="{ Component }">
-        <KeepAlive>
-          <component :is="Component" />
-        </KeepAlive>
+      <RouterView v-slot="{ Component, route: r }">
+        <Transition name="page-fade" mode="out-in">
+          <KeepAlive>
+            <component :is="Component" :key="r.path" />
+          </KeepAlive>
+        </Transition>
       </RouterView>
     </main>
   </div>
@@ -84,6 +86,83 @@ body {
   background: #f5f6fa;
   color: #1a1a2e;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 全局动效 ===== */
+
+/* 路由切换动画 */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* 按钮点击反馈 */
+.el-button:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* 卡片统一悬浮 */
+.el-card.is-hover-shadow:hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 收藏按钮心跳动画 */
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.is-favorited-anim {
+  animation: heartBeat 0.6s ease;
+}
+
+/* 骨架屏脉动 */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.el-skeleton__item {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Toast 通知美化 */
+.el-message {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 </style>
 

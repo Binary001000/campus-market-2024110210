@@ -763,3 +763,47 @@ AI 重写 NotFoundView.vue：弃用 el-result，自定义居中布局。120px/70
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 18 — Day 2 UI 重设计 Prompt 10: 全局动效与微交互
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+【全局动效与微交互】
+1. 路由切换: Transition fade+translateY 8px, 0.2s ease
+2. 卡片悬浮: 统一0.25s cubic-bezier
+3. 按钮点击: :active scale(0.97)
+4. 收藏动画: @keyframes heartBeat
+5. 骨架屏: pulse动画
+6. Toast: 圆角8px+阴影
+7. 滚动条: 5px宽, 圆角, #D1D5DB
+```
+
+---
+
+### AI 输出概要
+
+AI 在 App.vue 全局样式中添加：
+
+- **路由过渡**：Transition name="page-fade" mode="out-in"，opacity+translateY 0.2s
+- **按钮反馈**：.el-button:active scale(0.97)
+- **骨架屏**：@keyframes skeleton-pulse 1.5s脉动
+- **收藏动画**：@keyframes heartBeat 缩放弹跳
+- **Toast**：el-message 圆角8px+阴影
+- **滚动条**：::-webkit-scrollbar 5px宽，滑塊#D1D5DB圆角3px
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+> **
+
+---
+
+### 最终验证
+
+> **
