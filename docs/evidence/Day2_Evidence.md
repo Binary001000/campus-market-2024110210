@@ -203,3 +203,65 @@
 > 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 5
 
 ---
+
+## 进阶任务 2: 路由跳转增强
+
+### 实现内容
+
+实现 **列表页 → 详情页** 的完整跳转链路，通过动态路由参数 `:id` 传递商品编号。
+
+### 修改文件
+
+| 文件 | 变更 | 说明 |
+|------|------|------|
+| [src/router/index.ts](src/router/index.ts) | 路由 `/detail` → `/detail/:id` | 添加动态参数 `:id` |
+| [src/views/ListView.vue](src/views/ListView.vue) | 重写 | 8 条静态商品数据 + `<RouterLink :to="\`/detail/${item.id}\`">` 跳转 |
+| [src/views/DetailView.vue](src/views/DetailView.vue) | 重写 | `useRoute().params.id` 读取参数 + 商品详情展示 + 不存在兜底 |
+
+### 跳转流程
+
+```
+列表页 /list
+  │
+  │  点击商品卡片
+  │  <RouterLink to="/detail/3">
+  ▼
+详情页 /detail/3
+  │
+  │  useRoute() → route.params.id → "3"
+  │  itemMap["3"] → 台灯 LED 护眼
+  ▼
+渲染详情：标题 / 分类 / 价格 / 描述 / 卖家 / 编号
+```
+
+### 边界处理
+
+- **商品不存在**：`itemMap[id]` 为 `undefined` 时显示"商品不存在" + 返回列表链接
+- **返回导航**：详情页顶部提供 `← 返回列表` 链接
+
+### 技术要点
+
+- Vue Router 动态路由参数 `:id`
+- `useRoute()` 获取当前路由参数
+- `<RouterLink>` 声明式导航
+- TypeScript 类型安全的 `Record<string, ItemDetail>`
+
+### 验证
+
+执行 `vue-tsc --noEmit` 类型检查，无错误输出。
+
+---
+
+### 遇到的问题
+
+| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
+|:----:|---------|------|---------|:----:|
+| — | 暂无 | — | — | — |
+
+---
+
+### AI 协作记录
+
+> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 6
+
+---
