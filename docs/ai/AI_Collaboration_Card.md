@@ -731,3 +731,35 @@ AI 重写 BoardView.vue：时间选择(今日/本周/本月)、4统计卡片+趋
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 17 — Day 2 UI 重设计 Prompt 9: 404 页面
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+【404 页面 UI 重设计】
+120px渐变404数字(品牌蓝→活力橙)、🔍emoji 48px、"页面走丢了"20px/600、
+返回首页(主色)+返回上一页(outline)双按钮
+```
+
+---
+
+### AI 输出概要
+
+AI 重写 NotFoundView.vue：弃用 el-result，自定义居中布局。120px/700 数字用 CSS gradient text(品牌蓝→活力橙)、48px🔍emoji、标题20px/600、描述14px灰、双按钮圆角round+图标(HomeFilled/ArrowLeft)、min-height:60vh垂直居中。
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+> **
+
+---
+
+### 最终验证
+
+> **
