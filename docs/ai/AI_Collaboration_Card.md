@@ -92,3 +92,62 @@ AI 一次性创建了 6 个 Vue SFC 页面组件，每个包含：
 ### 最终验证
 
 > *（请在此处记录：验证结果——AI 的说法是否正确？你的项目是否能正常运行？）*
+
+---
+
+## 协作记录 3 — Day 2 Task 2: 完善路由系统
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+任务2：完善路由系统
+在 src/router/index.ts 中新增路由：
+必须包含以下路径：
+/home
+/list
+/detail
+/publish
+/message
+/profile
+/board
+示例结构：
+{
+  path: '/list',
+  name: 'List',
+  component: () => import('../views/ListView.vue')
+}
+注意
+路由必须与 views 文件一一对应
+至少保证 7 个页面可访问
+```
+
+---
+
+### AI 输出概要
+
+AI 更新 `src/router/index.ts`，新增 7 条路由（总计 8 条）：
+
+- 保留 `/` → HomeView（直接导入）
+- 新增 `/home` → HomeView（直接导入）
+- 其余 6 条路由全部使用 `() => import()` 懒加载
+- 每条路由配置 `path`、`name`、`component`
+
+发现并修复了 `/` 和 `/home` 的 name 冲突（均为 `'home'`），将 `/home` 的 name 改为 `'Home'`。
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+---
+
+### 自己修改
+
+> *（请在此处记录：你对 AI 输出做了哪些验证、修正或补充？）*
+
+---
+
+### 最终验证
+
+> *（请在此处记录：验证结果——AI 的说法是否正确？你的项目是否能正常运行？）*
