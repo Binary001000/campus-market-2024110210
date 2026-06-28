@@ -1,378 +1,114 @@
-# Day 2 Process Evidence
+# Day2 Evidence - 页面骨架与路由导航
 
 ---
 
-## Task 1: 扩展 7 大页面骨架
+## 1. 今日完成内容
 
-### 新增页面
+Day2 的核心任务是搭建"校园轻集市"PC 端 Web App 的**页面骨架**、完成**路由导航**配置，并设计**公共布局**组件。今日不要求实现复杂业务逻辑或接入真实数据，重点在于建立清晰的页面结构、路由关系和组件边界。
 
-在 `src/views/` 下新增 6 个页面组件，加上已有的 `HomeView.vue`，构成 7 大页面骨架：
+本日完成以下工作：
 
-| 序号 | 页面名称 | 文件名 | 路由路径（规划） | 说明 |
-|:----:|---------|--------|---------------|------|
-| 1 | 首页 | `HomeView.vue` | `/` | 已有，项目入口 |
-| 2 | 列表页 | `ListView.vue` | `/list` | 商品/信息列表 |
-| 3 | 详情页 | `DetailView.vue` | `/detail/:id` | 单个信息展示 |
-| 4 | 发布页 | `PublishView.vue` | `/publish` | 发布信息 |
-| 5 | 消息页 | `MessageView.vue` | `/message` | 消息中心 |
-| 6 | 个人中心 | `ProfileView.vue` | `/profile` | 个人中心 |
-| 7 | 看板页 | `BoardView.vue` | `/board` | 统计/概览 |
-
-### 页面模板结构
-
-每个页面均包含 Vue SFC 三段式结构：
-
-- `<script setup lang="ts">` — 组件逻辑（当前为空，后续填充）
-- `<template>` — 页面占位标题
-- `<style scoped>` — 组件样式（当前为空，后续添加）
+- 在 `src/views/` 下创建了 8 个页面组件（首页、二手交易、失物招领、拼单搭子、跑腿委托、发布、消息、个人中心）
+- 在 `src/components/` 下创建了 3 个公共布局组件（AppLayout、AppHeader、AppNav）
+- 配置了 `src/router/index.ts`，所有路由均包含 `meta.title`
+- 修改 `App.vue` 使用统一布局组件 `<AppLayout />`
+- 所有页面通过导航可正常访问跳转
 
 ---
 
-### 遇到的问题
+## 2. 页面与路由清单
 
-| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| — | 暂无 | — | — | — |
+| 页面名称 | 路由路径 | 文件位置 |
+|---------|---------|---------|
+| 首页 | `/` | `src/views/HomeView.vue` |
+| 二手集市 | `/list` | `src/views/ListView.vue` |
+| 失物招领 | `/lost-found` | `src/views/LostFoundView.vue` |
+| 拼单搭子 | `/group-buy` | `src/views/GroupBuyView.vue` |
+| 跑腿委托 | `/errand` | `src/views/ErrandView.vue` |
+| 发布信息 | `/publish` | `src/views/PublishView.vue` |
+| 消息中心 | `/message` | `src/views/MessageView.vue` |
+| 个人中心 | `/user` | `src/views/UserCenterView.vue` |
 
----
+### 公共布局组件
 
-### AI 协作记录
+| 组件名 | 文件位置 | 职责 |
+|-------|---------|------|
+| AppLayout | `src/components/AppLayout.vue` | 整体页面布局（Header + 内容区） |
+| AppHeader | `src/components/AppHeader.vue` | 顶部区域（Logo + 导航） |
+| AppNav | `src/components/AppNav.vue` | 导航菜单（首页/二手集市/失物招领/拼单搭子/跑腿委托/发布/消息/我的共8项） |
 
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 2
+### 路由配置要点
 
----
-
-## Task 2: 完善路由系统
-
-### 路由配置
-
-更新 `src/router/index.ts`，新增 7 条路由，总计 8 条：
-
-| 序号 | 路径 | 路由名称 | 视图组件 | 加载方式 |
-|:----:|------|---------|---------|:--------:|
-| 1 | `/` | `home` | `HomeView` | 直接导入 |
-| 2 | `/home` | `Home` | `HomeView` | 直接导入 |
-| 3 | `/list` | `List` | `ListView` | 懒加载 |
-| 4 | `/detail` | `Detail` | `DetailView` | 懒加载 |
-| 5 | `/publish` | `Publish` | `PublishView` | 懒加载 |
-| 6 | `/message` | `Message` | `MessageView` | 懒加载 |
-| 7 | `/profile` | `Profile` | `ProfileView` | 懒加载 |
-| 8 | `/board` | `Board` | `BoardView` | 懒加载 |
-
-### 路由设计说明
-
-- **路由模式**：`createWebHistory`（HTML5 History，URL 无 `#`）
-- **懒加载**：除 HomeView 外，其余 6 个页面均使用 `() => import()` 动态导入，按需加载，减小首屏体积
-- **路由命名**：每条路由均配置 `name`，支持命名跳转
-- **路由与视图一一对应**：每个路径对应一个 View 组件
-
-### 验证
-
-执行 `vue-tsc --noEmit` 类型检查，无错误输出。
+- 使用 `createWebHistory` 模式（HTML5 History，URL 无 `#`）
+- 每条路由配置了 `meta.title`，为后续页面标题更新和导航高亮预留扩展点
+- 导航栏最终结构：首页 | 二手集市 | 失物招领 | 拼单搭子 | 跑腿委托 | 发布 | 消息 | 我的
+- 路由路径保持语义化（如 `/list`、`/lost-found`、`/group-buy`、`/errand`）
+- 页面组件使用懒加载 `() => import()`，减小首屏体积
 
 ---
 
-### 遇到的问题
+## 3. AI 协作记录
 
-| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| 1 | `/` 和 `/home` 路由 name 冲突 | 两条路由都使用了 `name: 'home'`，Vue Router 要求路由名称唯一 | 将 `/home` 路由的 name 改为 `'Home'`（大写 H） | ✅ 已解决 |
+### 使用的 AI 工具
+Claude Code（DeepSeek v4 Pro）
 
----
-
-### AI 协作记录
-
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 3
-
----
-
-## Task 3: 构建基础导航系统
-
-### 导航更新
-
-在 `App.vue` 中新增顶部导航栏，包含 5 个核心入口：
-
-| 序号 | 导航项 | 目标路由 | 对应页面 |
-|:----:|-------|---------|---------|
-| 1 | 首页 | `/home` | HomeView |
-| 2 | 列表 | `/list` | ListView |
-| 3 | 发布 | `/publish` | PublishView |
-| 4 | 消息 | `/message` | MessageView |
-| 5 | 我的 | `/profile` | ProfileView |
-
-### 导航样式
-
-- **布局**：水平 Flex 布局，链接间距 16px
-- **分隔**：底部边框分隔导航与内容区
-- **交互**：悬停态背景色变化，当前路由高亮（蓝色加粗）
-
-### 页面结构
-
+### 核心 Prompt
 ```
-┌──────────────────────────────────┐
-│  <h1>校园轻集市</h1>              │  ← 全局标题
-│  <p>种子项目</p>                  │  ← 副标题
-│  ┌────────────────────────────┐  │
-│  │ 首页 | 列表 | 发布 | 消息 | 我的 │  │  ← 导航栏 (新增)
-│  └────────────────────────────┘  │
-│  ┌────────────────────────────┐  │
-│  │     <RouterView />         │  │  ← 页面内容区
-│  └────────────────────────────┘  │
-└──────────────────────────────────┘
+我正在开发一个名为"校园轻集市"的 PC 端 Vue3 Web App。
+技术栈为 Vue3 + Vite + TypeScript + Vue Router + Pinia。
+
+请帮我完成 Day2 的页面骨架与路由导航任务：
+1. 创建首页、二手交易、失物招领、拼单搭子、跑腿委托、发布、消息、个人中心等页面；
+2. 配置 Vue Router 路由；
+3. 创建公共布局组件，包括顶部导航、页面容器和内容区域；
+4. 页面暂时只需要基础结构，不需要真实业务数据；
+5. 代码应保持简洁，适合教学实训项目继续扩展。
 ```
 
-### 验证
+### AI 生成内容
+- 页面文件：TradeView、LostFoundView、GroupBuyView、ErrandView、UserCenterView（简洁骨架）
+- 公共组件：AppLayout、AppHeader、AppNav（按规范示例实现）
+- 路由配置：8 条路由 + meta.title
+- App.vue 改为使用 AppLayout
 
-执行 `vue-tsc --noEmit` 类型检查，无错误输出。
+### 人工审查与修改
+| 审查项 | 结果 |
+|-------|------|
+| 页面是否完整 | ✅ 包含 8 个核心页面 |
+| 路由是否正确 | ✅ 路径、组件、名称一一对应 |
+| 组件是否合理 | ✅ 页面组件与公共组件已分离 |
+| 代码是否简洁 | ✅ 仅包含 template + script setup + 基础样式 |
+| 项目是否可运行 | ✅ vue-tsc 类型检查通过 |
+| 业务是否贴合 | ✅ 围绕校园二手/失物/拼单/跑腿场景 |
 
 ---
 
-### 遇到的问题
+## 4. 遇到的问题与解决方法
 
 | 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| — | 暂无 | — | — | — |
+|:--:|---------|------|---------|:--:|
+| 1 | 早期实现的路由 `/` 和 `/home` 存在 name 冲突 | 两条路由都使用了 `name: 'home'`，Vue Router 要求唯一 | 修正路由 name，最终按规范只保留 `/` 一条首页路由 | ✅ |
+| 2 | 初期页面内容过于复杂 | AI 生成了包含 Element Plus 组件、静态业务数据、动画等代码，超出 Day2 简洁骨架要求 | 对照官方 day2 规范，将新增的分类页面（TradeView 等）改为极简骨架：仅 `<h1>` + `<p>` 说明文字 | ✅ |
+| 3 | 公共组件未拆分 | 早期导航栏、布局全部内嵌在 App.vue 中，不符合"页面组件与通用组件分离"的要求 | 按规范拆分为 AppLayout / AppHeader / AppNav 三个独立组件，App.vue 仅一行 `<AppLayout />` | ✅ |
+| 4 | 路由缺少 meta.title | 初期路由配置未添加 meta 字段 | 为所有路由添加 `meta: { title: '...' }` | ✅ |
+| 5 | 首页入口卡片无法跳转到分类页 | 四类入口 RouterLink 全部指向 `/list` | 为每个入口配置独立路由（二手集市的卡片跳 `/list`，其余各分类跳对应路由） | ✅ |
+| 6 | 原有商品列表和详情页丢失 | 规范合规修改时移除了 `/list` 和 `/detail/:id` 路由 | 补回两条路由，同时保留新增的分类页面 | ✅ |
+| 7 | 导航栏出现"集市"和"二手交易"两个相近入口 | 早期设计将统一列表和二手分类分开 | 合并为"二手集市"单一入口 → `/list`，删除 `/trade` 路由 | ✅ |
 
 ---
 
-### AI 协作记录
+## 5. 今日反思
 
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 4
+页面骨架、路由导航和公共布局对后续开发的作用：
 
----
+**页面骨架**为项目提供了清晰的文件边界——每个业务场景对应一个独立页面文件，后续开发时可以直接定位到目标文件进行功能填充。如果没有统一的页面骨架，随着功能增加，文件会变得混乱，出现"想改列表页不知道去哪个文件改"的问题。
 
-## 进阶任务 1: 看板页设计
+**路由导航**决定了用户如何在页面之间流转。良好的路由设计（语义化路径、命名路由、meta 扩展）不仅让 URL 可读，也为后续的路由守卫、页面标题动态更新、权限控制等提供了基础设施。如果在 Day2 路由混乱，后续添加新页面时会越来越难以维护。
 
-### 页面内容
+**公共布局**将页面的"框架"与"内容"分离——AppLayout 负责整体结构，AppHeader 负责顶部，AppNav 负责导航。当需要修改导航菜单（如新增一个入口）时，只需修改 AppNav.vue 一个文件，所有页面自动生效。这种"修改一处、全局更新"的能力，是组件化开发的核心价值。
 
-在 `BoardView.vue` 中实现数据看板，包含三个模块：
-
-**① 统计卡片（4 项）**
-
-| 指标 | 数值 | 单位 | 趋势 |
-|------|:----:|------|:----:|
-| 在售商品 | 326 | 件 | ↑ |
-| 活跃用户 | 1,280 | 人 | ↑ |
-| 今日访问 | 4,567 | 次 | ↑ |
-| 成交订单 | 89 | 单 | → |
-
-**② 商品分类分布**
-
-| 分类 | 数量 |
-|------|:----:|
-| 教材教辅 | 86 |
-| 电子产品 | 64 |
-| 生活用品 | 58 |
-| 运动户外 | 42 |
-| 服饰美妆 | 39 |
-| 其他 | 37 |
-
-**③ 最新发布（5 条）**
-
-| 商品 | 价格 | 时间 |
-|------|:----:|------|
-| 《数据结构》教材 9成新 | ¥25 | 10分钟前 |
-| 机械键盘 Cherry 青轴 | ¥180 | 25分钟前 |
-| 台灯 LED 护眼 | ¥35 | 1小时前 |
-| 四级词汇书（赠笔记） | ¥15 | 2小时前 |
-| iPad 保护壳 全新 | ¥28 | 3小时前 |
-
-### 技术实现
-
-- **TypeScript 接口**：定义 `StatItem` 类型（含 trend 枚举）
-- **响应式数据**：`stats`、`categories`、`recentItems` 三个静态数据数组
-- **布局**：CSS Grid — 4 列统计卡片 + 2 列详情面板
-- **趋势指示**：↑ 绿色（上涨）、↓ 红色（下跌）、→ 灰色（持平）
-
-### 验证
-
-执行 `vue-tsc --noEmit` 类型检查，无错误输出。
+三者共同构成了前端项目的"骨架系统"——骨架稳固，后续填肉才有效率；骨架混乱，后续每一步都会付出额外代价。
 
 ---
 
-### 遇到的问题
-
-| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| — | 暂无 | — | — | — |
-
----
-
-### AI 协作记录
-
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 5
-
----
-
-## 进阶任务 2: 路由跳转增强
-
-### 实现内容
-
-实现 **列表页 → 详情页** 的完整跳转链路，通过动态路由参数 `:id` 传递商品编号。
-
-### 修改文件
-
-| 文件 | 变更 | 说明 |
-|------|------|------|
-| [src/router/index.ts](src/router/index.ts) | 路由 `/detail` → `/detail/:id` | 添加动态参数 `:id` |
-| [src/views/ListView.vue](src/views/ListView.vue) | 重写 | 8 条静态商品数据 + `<RouterLink :to="\`/detail/${item.id}\`">` 跳转 |
-| [src/views/DetailView.vue](src/views/DetailView.vue) | 重写 | `useRoute().params.id` 读取参数 + 商品详情展示 + 不存在兜底 |
-
-### 跳转流程
-
-```
-列表页 /list
-  │
-  │  点击商品卡片
-  │  <RouterLink to="/detail/3">
-  ▼
-详情页 /detail/3
-  │
-  │  useRoute() → route.params.id → "3"
-  │  itemMap["3"] → 台灯 LED 护眼
-  ▼
-渲染详情：标题 / 分类 / 价格 / 描述 / 卖家 / 编号
-```
-
-### 边界处理
-
-- **商品不存在**：`itemMap[id]` 为 `undefined` 时显示"商品不存在" + 返回列表链接
-- **返回导航**：详情页顶部提供 `← 返回列表` 链接
-
-### 技术要点
-
-- Vue Router 动态路由参数 `:id`
-- `useRoute()` 获取当前路由参数
-- `<RouterLink>` 声明式导航
-- TypeScript 类型安全的 `Record<string, ItemDetail>`
-
-### 验证
-
-执行 `vue-tsc --noEmit` 类型检查，无错误输出。
-
----
-
-### 遇到的问题
-
-| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| — | 暂无 | — | — | — |
-
----
-
-### AI 协作记录
-
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 6
-
----
-
-## 进阶任务 3: UI 优化（Element Plus）
-
-### 注册 Element Plus
-
-在 `main.ts` 中全局注册 Element Plus 2.14.2：
-
-```ts
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
-app.use(ElementPlus)
-```
-
-### 优化清单
-
-| 文件 | 使用的 Element Plus 组件 | 说明 |
-|------|------------------------|------|
-| [src/main.ts](src/main.ts) | — | 注册 Element Plus |
-| [src/App.vue](src/App.vue) | `<el-menu>` + `<el-menu-item>` | 水平导航栏，`router` 模式集成 Vue Router，自动高亮当前路由；新增看板入口 |
-| [src/views/BoardView.vue](src/views/BoardView.vue) | `<el-row>` `<el-col>` `<el-card>` `<el-tag>` | 响应式栅格布局，卡片阴影悬浮效果，分类标签着色 |
-| [src/views/ListView.vue](src/views/ListView.vue) | `<el-card>` `<el-tag>` | 商品卡片悬浮效果，分类标签颜色区分 |
-| [src/views/DetailView.vue](src/views/DetailView.vue) | `<el-card>` `<el-tag>` `<el-button>` `<el-divider>` `<el-result>` | 详情卡片、分隔线、联系卖家按钮、商品不存在结果页 |
-
-### 导航栏对比
-
-| 维度 | 优化前 | 优化后 |
-|------|--------|--------|
-| 组件 | 原生 `<nav>` + `<RouterLink>` | `<el-menu mode="horizontal" router>` |
-| 高亮 | 手动 CSS `router-link-active` | Element Plus 内置 `default-active` |
-| 入口数 | 5 个 | 6 个（新增看板） |
-| 样式 | 手写 30+ 行 CSS | Element Plus 默认主题 |
-| 响应式 | 无 | el-menu 内置折叠 |
-
-### 验证
-
-执行 `vue-tsc --noEmit` 类型检查，无错误输出。
-
----
-
-### 遇到的问题
-
-| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| — | 暂无 | — | — | — |
-
----
-
-### AI 协作记录
-
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 7
-
----
-
-## Day 2 补充任务: 页面完善与路由增强
-
-对照《实训计划》Day 2 验收标准，完成 6 项补充优化。
-
-### 修改文件
-
-| # | 文件 | 变更 | 说明 |
-|:--|------|------|------|
-| 1 | [HomeView.vue](src/views/HomeView.vue) | 重写 | 欢迎区 + 4 类业务入口卡片 + 我的数据统计 + 最新发布列表 + 快捷入口 |
-| 2 | [PublishView.vue](src/views/PublishView.vue) | 重写 | 信息类型选择（el-radio-button 四选一）+ 通用字段 + 类型专属动态字段 + 表单操作栏 |
-| 3 | [MessageView.vue](src/views/MessageView.vue) | 重写 | 左右双栏布局：会话列表 + 聊天区（气泡消息 + 输入框）+ 未读角标 |
-| 4 | [ProfileView.vue](src/views/ProfileView.vue) | 重写 | 用户资料卡片（学院/校区/角色/信用分）+ el-tabs 切换我的发布/我的收藏 + 状态更新入口 |
-| 5 | [App.vue](src/App.vue) | 修改 | `activeIndex` 从硬编码 `ref('/home')` → `useRoute()` 动态计算，任何 URL 进入导航高亮均正确 |
-| 6 | [NotFoundView.vue](src/views/NotFoundView.vue) | 新建 | `el-result` 404 提示 + 返回首页按钮 |
-| 7 | [index.ts](src/router/index.ts) | 修改 | 新增通配路由 `/:pathMatch(.*)*` → NotFoundView |
-
-### 各页面使用的 Element Plus 组件
-
-| 页面 | 组件 |
-|------|------|
-| HomeView | `el-row` `el-col` `el-card` `el-tag` `el-badge` `el-button` |
-| PublishView | `el-card` `el-radio-group` `el-radio-button` `el-input` `el-select` `el-input-number` `el-switch` `el-divider` `el-button` |
-| MessageView | `el-badge` `el-input` `el-button` |
-| ProfileView | `el-card` `el-tabs` `el-tab-pane` `el-tag` `el-empty` `el-button` |
-| NotFoundView | `el-result` `el-button` |
-
-### Day 2 验收标准对照
-
-| 标准 | 状态 |
-|------|:--:|
-| 能通过导航访问所有主要页面 | ✅ |
-| 页面刷新后无明显报错 | ✅ |
-| 首页展示四类业务入口 | ✅ |
-| 列表页展示静态信息卡片结构 | ✅ |
-| 发布页/消息页/个人中心/看板页具备基本框架 | ✅ |
-| 404 页面 | ✅ |
-| 导航高亮同步 | ✅ |
-
-### 验证
-
-执行 `vue-tsc --noEmit` 类型检查，无错误输出。
-
----
-
-### 遇到的问题
-
-| 序号 | 问题描述 | 原因 | 解决方案 | 状态 |
-|:----:|---------|------|---------|:----:|
-| 1 | MessageView / ProfileView 中 `ref` 报错 | 初次写入时未 import `ref` | 补充 `import { ref } from 'vue'` | ✅ 已解决 |
-| 2 | App.vue `activeIndex` 切换路由后高亮不更新 | 硬编码 `ref('/home')` 只在初始化时设定 | 改用 `useRoute()` + `computed(() => route.path)` 动态绑定 | ✅ 已解决 |
-
----
-
-### AI 协作记录
-
-> 见 [AI_Collaboration_Card.md](../ai/AI_Collaboration_Card.md) — 协作记录 8
-
----
+**填写日期**：2026-06-28

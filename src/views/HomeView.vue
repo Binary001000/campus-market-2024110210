@@ -2,10 +2,10 @@
 import { Search } from '@element-plus/icons-vue'
 
 const entries = [
-  { type: 'secondhand', label: '二手交易', icon: '🛒', desc: '闲置物品买卖' },
-  { type: 'lostfound', label: '失物招领', icon: '🔍', desc: '丢失 & 拾获互助' },
-  { type: 'group', label: '拼单搭子', icon: '👥', desc: '拼单 & 找搭子' },
-  { type: 'errand', label: '跑腿委托', icon: '🏃', desc: '代取快递 & 代办事务' },
+  { type: 'secondhand', label: '二手集市', icon: '🛒', desc: '闲置物品买卖', route: '/list' },
+  { type: 'lostfound', label: '失物招领', icon: '🔍', desc: '丢失 & 拾获互助', route: '/lost-found' },
+  { type: 'group', label: '拼单搭子', icon: '👥', desc: '拼单 & 找搭子', route: '/group-buy' },
+  { type: 'errand', label: '跑腿委托', icon: '🏃', desc: '代取快递 & 代办事务', route: '/errand' },
 ]
 
 const stats = [
@@ -53,7 +53,7 @@ const hotItems = [
         <RouterLink
           v-for="e in entries"
           :key="e.type"
-          :to="`/list`"
+          :to="e.route"
           class="entry-card"
         >
           <div class="entry-icon">{{ e.icon }}</div>

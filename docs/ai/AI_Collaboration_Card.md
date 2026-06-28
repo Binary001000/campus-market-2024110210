@@ -848,3 +848,93 @@ AI 在 App.vue 全局样式中添加 @media 查询：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 20 — Day2 规范合规修改
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+依照官方 day2.txt 规范文档，仅修改必须修改的 12 项：
+1-4. 新增 TradeView/LostFoundView/GroupBuyView/ErrandView（简洁骨架）
+5-7. 创建 AppLayout/AppHeader/AppNav 公共布局组件
+8-9. ProfileView→UserCenterView，路由 /profile→/user
+10. 路由新增 /trade、/lost-found、/group-buy、/errand
+11. 每路由添加 meta.title
+12. 新页面保持简洁骨架（仅<h1>+<p>）
+
+完成后按官方模板重写 Day2_Evidence.md
+```
+
+---
+
+### AI 输出概要
+
+AI 执行全部 12 项必须修改：
+
+- **5 个新页面**：TradeView / LostFoundView / GroupBuyView / ErrandView / UserCenterView，均为极简骨架（template h1+p + script setup + 24px padding）
+- **3 个布局组件**：AppLayout(整体) + AppHeader(Logo+Slogan+Nav) + AppNav(8 个 RouterLink)，完全按官方示例代码实现
+- **路由重写**：8 条规范路由（`/` `/trade` `/lost-found` `/group-buy` `/errand` `/publish` `/message` `/user`），每条含 meta.title，使用懒加载
+- **App.vue**：简化为 `<AppLayout />` 一行
+- **Evidence**：按官方模板重写（页面清单表格 + AI 协作 + 4 个问题 + 500 字反思）
+- 类型检查通过
+
+> **
+
+---
+
+### 最终验证
+
+> **
+
+---
+
+## 协作记录 21 — Day2 后续优化: 合并集市、分类页设计、移除类型筛选
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+1. 首页四类入口卡片点击无法跳转到对应分类页 → 修复路由映射
+2. 原来商品的详情页路由丢失 → 补回 /list /detail/:id /board 路由
+3. 集市+二手交易合并为"二手集市"，导航中去掉独立二手交易入口
+4. TradeView/LostFoundView/GroupBuyView/ErrandView/UserCenterView 填充静态内容并设计 UI
+5. 二手集市页面移除类型下拉筛选（不再需要四类切换）
+```
+
+---
+
+### AI 输出概要
+
+**修复跳转**：HomeView 四类入口从统一 `/list` 改为各自路由（二手→/list, 失物→/lost-found, 拼单→/group-buy, 跑腿→/errand）
+
+**补回路由**：恢复 `/list`、`/detail/:id`、`/board`、404 通配路由
+
+**合并集市**：AppNav 中"集市"+"二手交易"合并为"二手集市"→`/list`；移除 `/trade` 路由；HomeView 入口卡片"二手交易"→"二手集市"
+
+**分类页设计**：
+- TradeView：6 条二手商品横向卡片（图占位+标题+描述+标签+价格）
+- LostFoundView：6 条失物招领卡片（丢失🔴/拾获🟢双色标签+地点+特征）
+- GroupBuyView：5 条拼单卡片（进度条+人数+截止时间+发起人）
+- ErrandView：5 条跑腿卡片（酬劳💰橙色+任务描述+发布人）
+- UserCenterView：渐变用户卡片+数据行+标签切换我的发布/收藏
+
+**移除筛选**：ListView 删除 `typeOptions` + `selectedType` + 类型 el-select + 类型过滤逻辑，搜索占位改为"搜索二手商品..."
+
+所有修改类型检查通过。
+
+> **
+
+---
+
+### 最终验证
+
+> *个人检测结果为符合day2要求*

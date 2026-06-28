@@ -24,13 +24,11 @@ const items: ListItem[] = [
   { id: 8, title: '考研英语真题集', desc: '历年真题详解，含详细解析和答题技巧', price: 20, type: '二手交易', campus: '东校区', status: '已完成', time: '6 小时前' },
 ]
 
-const typeOptions = ['全部', '二手交易', '失物招领', '拼单搭子', '跑腿委托']
 const campusOptions = ['全部校区', '北校区', '南校区', '东校区', '西校区']
 const sortOptions = ['最新发布', '价格↑', '价格↓', '最热门']
 const statusOptions = ['全部状态', '进行中', '已完成', '已关闭']
 
 const searchQuery = ref('')
-const selectedType = ref('全部')
 const selectedCampus = ref('全部校区')
 const selectedSort = ref('最新发布')
 const selectedStatus = ref('全部状态')
@@ -41,9 +39,6 @@ const filteredItems = computed(() => {
   let result = [...items]
   if (searchQuery.value) {
     result = result.filter(i => i.title.includes(searchQuery.value))
-  }
-  if (selectedType.value !== '全部') {
-    result = result.filter(i => i.type === selectedType.value)
   }
   if (selectedCampus.value !== '全部校区') {
     result = result.filter(i => i.campus === selectedCampus.value)
@@ -80,14 +75,11 @@ const typeTagColor = (type: string): '' | 'success' | 'warning' | 'danger' | 'in
         <div class="filter-row">
           <el-input
             v-model="searchQuery"
-            placeholder="搜索商品、失物、拼单..."
+            placeholder="搜索二手商品..."
             :prefix-icon="Search"
             class="filter-search"
             clearable
           />
-          <el-select v-model="selectedType" class="filter-select">
-            <el-option v-for="t in typeOptions" :key="t" :label="t" :value="t" />
-          </el-select>
           <el-select v-model="selectedCampus" class="filter-select">
             <el-option v-for="c in campusOptions" :key="c" :label="c" :value="c" />
           </el-select>
