@@ -379,3 +379,58 @@ AI 一次性完成 6 项代码修改 + 证据文档更新：
 ### 最终验证
 
 > *（目前并未完全实现我的需求，很多处任然需要改进优化，ui，交互体验都需进一步改进）*
+
+---
+
+## 协作记录 9 — Day 2 UI 重设计 Prompt 1: 全局导航栏
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+【全局导航栏 UI 重设计】
+参考闲鱼顶部导航 + 京东搜索栏设计规范。
+
+A. 三区布局：左区Logo | 中区6导航项 | 右区用户
+B. 左区：🏪图标 + "校园轻集市" 18px/700/品牌蓝
+C. 中区：首页/集市/发布/消息/我的/看板，每项前Element Plus图标
+   当前路由高亮：品牌蓝文字 + 底部3px短线(animation 0.3s)
+   非高亮灰色，hover渐变为主色
+D. 右区：32px圆形头像 + "校园用户"
+E. 白色背景 + position:sticky + 底部浅阴影 + 高度56px + max-width 1200px
+
+技术约束：Vue 3 + script setup + TypeScript + Element Plus + scoped CSS
+          使用 useRoute() 计算当前路由
+```
+
+---
+
+### AI 输出概要
+
+AI 先安装 `@element-plus/icons-vue`，然后重写 `App.vue`：
+
+- **全局布局**：`.app-shell` 作为根容器，背景 #F5F6FA
+- **导航栏**：自定义 header（非 el-menu），三区 Flex 布局
+  - 左区 `<RouterLink to="/">` + 🏪 emoji + "校园轻集市"（品牌蓝 18px/700）
+  - 中区 6 个 `<RouterLink>` 导航项，每项含 `<el-icon>` + 文字标签
+  - 右区用户头像占位(32px圆形灰底) + "校园用户"文字
+- **高亮机制**：`isActive()` 函数 + `.active::after` 伪元素画 3px 品牌蓝短线
+- **全局 CSS Reset**：移除默认 margin/padding + 统一字体栈(PingFang SC)
+- **页面内容区**：max-width 1200px 居中 + padding 24px
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+---
+
+### 自己修改
+
+> *（）*
+
+---
+
+### 最终验证
+
+> *（）*
