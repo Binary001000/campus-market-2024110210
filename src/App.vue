@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   HomeFilled,
@@ -60,9 +59,13 @@ const isActive = (path: string) => {
       </div>
     </header>
 
-    <!-- 页面内容 -->
+    <!-- 页面内容（KeepAlive 缓存组件状态，返回时不丢失筛选/分页） -->
     <main class="page-content">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <KeepAlive>
+          <component :is="Component" />
+        </KeepAlive>
+      </RouterView>
     </main>
   </div>
 </template>
