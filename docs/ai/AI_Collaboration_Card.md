@@ -151,3 +151,62 @@ AI 更新 `src/router/index.ts`，新增 7 条路由（总计 8 条）：
 ### 最终验证
 
 > *（请在此处记录：验证结果——AI 的说法是否正确？你的项目是否能正常运行？）*
+
+---
+
+## 协作记录 4 — Day 2 Task 3: 构建基础导航系统
+
+**日期**：2026-06-28
+
+---
+
+### Prompt
+
+```
+任务3：构建基础导航系统
+在 App.vue 中实现页面入口导航：
+📌 必须实现
+● 首页
+● 列表页
+● 发布页
+● 消息页
+● 个人中心
+示例（可用最简方式）：
+<template>
+  <nav>
+    <router-link to="/home">首页</router-link>
+    <router-link to="/list">列表</router-link>
+    <router-link to="/publish">发布</router-link>
+    <router-link to="/message">消息</router-link>
+    <router-link to="/profile">我的</router-link>
+  </nav>
+  <router-view />
+</template>
+```
+
+---
+
+### AI 输出概要
+
+AI 更新 `App.vue`，在保留原有标题和副标题的基础上，新增了顶部导航栏：
+
+- 5 个 `<RouterLink>` 分别指向 5 个核心页面
+- 水平 Flex 布局，链接间距 16px
+- 底部边框分隔导航与内容区
+- 悬停效果（灰色背景）
+- 当前路由高亮（`router-link-active` 蓝色加粗）
+- 导航栏位于标题之后、`<RouterView />` 之前
+
+通过 `vue-tsc --noEmit` 类型检查，无错误。
+
+---
+
+### 自己修改
+
+> *（请在此处记录：你对 AI 输出做了哪些验证、修正或补充？）*
+
+---
+
+### 最终验证
+
+> *（请在此处记录：验证结果——AI 的说法是否正确？你的项目是否能正常运行？）*
