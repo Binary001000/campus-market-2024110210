@@ -1012,3 +1012,41 @@ Day3 Mock 数据建模任务：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 24 — Day 3 Prompt 3: 通用组件 + 页面数据驱动
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. 创建 ItemCard.vue（Props：title/description/tag/location/time + #footer 插槽）
+2. 创建 EmptyState.vue（Props：text）
+3. 改造 TradeView/LostFoundView/GroupBuyView/ErrandView 为数据驱动：
+   onMounted 调用 API → ref 存储 → ItemCard 渲染 → 空数据时显示 EmptyState
+```
+
+---
+
+### AI 输出概要
+
+- **ItemCard.vue**：通用卡片组件，白底圆角12px，header(h3+tag) + description + meta(location/time) + #footer 插槽
+- **EmptyState.vue**：虚线边框居中组件，灰色文字
+- **TradeView**：`getTrades()` → `<ItemCard>` 2列Grid，footer 显示价格+成色
+- **LostFoundView**：`getLostFounds()` → tag 区分丢失(红)/拾获(绿)，status 颜色映射
+- **GroupBuyView**：`getGroupBuys()` → footer 显示人数进度
+- **ErrandView**：`getErrands()` → location 显示起止点(from→to)，footer 显示酬劳
+- 四个页面均含 `<EmptyState v-else>` 处理空数据
+- `vue-tsc --noEmit` 零错误
+
+> **
+
+---
+
+### 最终验证
+
+> **
