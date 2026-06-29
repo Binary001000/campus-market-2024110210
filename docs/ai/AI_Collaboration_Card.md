@@ -961,12 +961,49 @@ Day3 Mock 数据建模任务：
 
 ### AI 输出概要
 
-- **安装**：`pnpm add json-server -D` → json-server 1.0.0-beta.15
+- **安装**：`pnpm add json-server -D` → 初次安装 1.0.0-beta.15，后按项目要求切换为 `json-server@0.17.4`
 - **db.json**：4 个数据集合，trades 6 条 / lostFounds 5 条 / groupBuys 5 条 / errands 5 条，共计 21 条数据
 - **数据内容**：机械键盘、高数教材、台灯、考研真题、iPad 壳、校园卡丢失、雨伞拾获、AirPods 丢失、火锅拼单、考研搭子、夜跑搭子、取快递、代买晚餐、代办文件等校园场景
 - **字段规范**：数值字段用 number，状态用 open/closed/done，图片字段空字符串
 - **mock 脚本**：已添加到 package.json scripts
-- **验证**：JSON Server 启动成功，`/trades` `/lostFounds` `/groupBuys` `/errands` 四个端点均可访问
+- **验证**：JSON Server 0.17.4 启动成功，`/trades` `/lostFounds` `/groupBuys` `/errands` 四个端点均可访问
+- **版本调整**：按项目要求从 beta 版切换为稳定版 0.17.4，启动命令 `npx json-server --watch db.json --port 3001` 不变
+
+> **
+
+---
+
+### 最终验证
+
+> **
+
+---
+
+## 协作记录 23 — Day 3 Prompt 2: Axios 封装 + API 模块
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. 创建 src/api/http.ts：axios.create({ baseURL: 'http://localhost:3001', timeout: 5000 })
+2. 创建 trade.ts / lostFound.ts / groupBuy.ts / errand.ts，每个导出 TS 接口 + getXxx() 函数
+```
+
+---
+
+### AI 输出概要
+
+- **安装**：`pnpm add axios` → axios 1.18.1
+- **http.ts**：Axios 实例，baseURL localhost:3001，timeout 5s，无拦截器
+- **trade.ts**：TradeItem 接口（11字段）+ `getTrades()` → GET /trades
+- **lostFound.ts**：LostFoundItem 接口（type 为 'lost'|'found'）+ `getLostFounds()` → GET /lostFounds
+- **groupBuy.ts**：GroupBuyItem 接口 + `getGroupBuys()` → GET /groupBuys
+- **errand.ts**：ErrandItem 接口 + `getErrands()` → GET /errands
+- 接口字段与 db.json 一一对应
+- `vue-tsc --noEmit` 通过
 
 > **
 
