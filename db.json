@@ -1,0 +1,263 @@
+{
+  "trades": [
+    {
+      "id": 1,
+      "title": "九成新机械键盘 Cherry 青轴",
+      "category": "数码配件",
+      "price": 89,
+      "condition": "九成新",
+      "location": "东区宿舍 3 号楼",
+      "publisher": "软件工程 2023 级 张同学",
+      "publishTime": "2026-06-20 10:20",
+      "image": "",
+      "status": "open",
+      "description": "87键紧凑布局，使用半年，手感很好，配件齐全，因换了无线键盘所以转让。"
+    },
+    {
+      "id": 2,
+      "title": "高等数学（上册）教材",
+      "category": "教材资料",
+      "price": 18,
+      "condition": "八成新",
+      "location": "图书馆门口",
+      "publisher": "数学学院 李同学",
+      "publishTime": "2026-06-21 14:30",
+      "image": "",
+      "status": "open",
+      "description": "有少量笔记但不影响阅读，适合大一同学使用。"
+    },
+    {
+      "id": 3,
+      "title": "台灯 LED 护眼 三档调光",
+      "category": "生活用品",
+      "price": 35,
+      "condition": "九成新",
+      "location": "北校区宿舍 5 号楼",
+      "publisher": "文学院 王同学",
+      "publishTime": "2026-06-22 09:15",
+      "image": "",
+      "status": "open",
+      "description": "LED 护眼台灯，三档亮度可调，无频闪，宿舍学习必备。"
+    },
+    {
+      "id": 4,
+      "title": "考研英语真题集 2025版",
+      "category": "教材资料",
+      "price": 20,
+      "condition": "七成新",
+      "location": "东校区自习室",
+      "publisher": "研究生院 吴同学",
+      "publishTime": "2026-06-23 16:00",
+      "image": "",
+      "status": "open",
+      "description": "历年真题详解，含详细解析和答题技巧，已上岸故转让。"
+    },
+    {
+      "id": 5,
+      "title": "iPad Pro 11寸保护壳 全新未拆",
+      "category": "数码配件",
+      "price": 28,
+      "condition": "全新",
+      "location": "西校区宿舍 7 号楼",
+      "publisher": "艺术学院 陈同学",
+      "publishTime": "2026-06-24 11:40",
+      "image": "",
+      "status": "open",
+      "description": "买错了型号所以转让，全新未拆封，包装完好。"
+    },
+    {
+      "id": 6,
+      "title": "瑜伽垫 加厚防滑 183×61cm",
+      "category": "运动户外",
+      "price": 45,
+      "condition": "九成新",
+      "location": "南校区体育馆",
+      "publisher": "体育学院 刘同学",
+      "publishTime": "2026-06-25 08:00",
+      "image": "",
+      "status": "done",
+      "description": "厚度6mm，只用过几次，适合在宿舍或操场锻炼使用。"
+    }
+  ],
+  "lostFounds": [
+    {
+      "id": 1,
+      "title": "寻找黑色校园卡",
+      "type": "lost",
+      "itemName": "校园卡",
+      "location": "一食堂二楼",
+      "eventTime": "2026-06-22 12:10",
+      "contact": "站内消息联系",
+      "status": "open",
+      "description": "校园卡卡套为黑色，上面有姓名贴纸，卡号后四位 3821。"
+    },
+    {
+      "id": 2,
+      "title": "拾到蓝色折叠雨伞",
+      "type": "found",
+      "itemName": "雨伞",
+      "location": "教学楼 A 区 302 教室",
+      "eventTime": "2026-06-22 18:40",
+      "contact": "站内消息联系",
+      "status": "open",
+      "description": "深蓝色自动折叠伞，放在 A 区一楼值班室，请失主尽快认领。"
+    },
+    {
+      "id": 3,
+      "title": "丢失 AirPods 充电盒",
+      "type": "lost",
+      "itemName": "蓝牙耳机充电盒",
+      "location": "图书馆三楼阅览室",
+      "eventTime": "2026-06-23 15:00",
+      "contact": "站内消息联系",
+      "status": "open",
+      "description": "白色 AirPods Pro 充电盒，有蓝色保护壳，可能在 3 楼靠窗座位附近。"
+    },
+    {
+      "id": 4,
+      "title": "拾到钥匙串（哆啦A梦挂件）",
+      "type": "found",
+      "itemName": "钥匙串",
+      "location": "操场跑道旁长椅",
+      "eventTime": "2026-06-24 07:30",
+      "contact": "站内消息联系",
+      "status": "open",
+      "description": "三把钥匙加一个哆啦A梦挂件，暂存于体育馆服务台。"
+    },
+    {
+      "id": 5,
+      "title": "丢失深蓝色双肩包",
+      "type": "lost",
+      "itemName": "双肩包",
+      "location": "二食堂一楼",
+      "eventTime": "2026-06-25 12:00",
+      "contact": "站内消息联系",
+      "status": "open",
+      "description": "品牌 Jansport，包内有教材《计算机网络》和笔袋。"
+    }
+  ],
+  "groupBuys": [
+    {
+      "id": 1,
+      "title": "周五晚火锅拼单",
+      "type": "拼餐",
+      "targetCount": 6,
+      "currentCount": 3,
+      "deadline": "2026-06-27 17:00",
+      "location": "学校南门外火锅店",
+      "publisher": "计算机学院 刘同学",
+      "status": "open",
+      "description": "AA 制，人均预算 60 元，人数够后统一预约。"
+    },
+    {
+      "id": 2,
+      "title": "四六级真题资料团购",
+      "type": "学习资料",
+      "targetCount": 10,
+      "currentCount": 7,
+      "deadline": "2026-06-28 22:00",
+      "location": "线上确认",
+      "publisher": "外国语学院 赵同学",
+      "status": "open",
+      "description": "团购价格更优惠，达到人数后统一下单。"
+    },
+    {
+      "id": 3,
+      "title": "考研搭子 每天图书馆互相监督",
+      "type": "学习搭子",
+      "targetCount": 4,
+      "currentCount": 2,
+      "deadline": "2026-07-05 08:00",
+      "location": "图书馆二楼",
+      "publisher": "数学学院 王同学",
+      "status": "open",
+      "description": "每天早上 8 点到晚上 9 点，互相监督打卡，目标 2027 考研。"
+    },
+    {
+      "id": 4,
+      "title": "夜跑搭子 操场见",
+      "type": "运动搭子",
+      "targetCount": 6,
+      "currentCount": 3,
+      "deadline": "长期有效",
+      "location": "北校区操场",
+      "publisher": "体育学院 陈同学",
+      "status": "open",
+      "description": "每天晚上 9 点操场跑步，配速 6 分，互相督促坚持锻炼。"
+    },
+    {
+      "id": 5,
+      "title": "当季水果拼单团购",
+      "type": "拼购",
+      "targetCount": 10,
+      "currentCount": 5,
+      "deadline": "2026-06-29 12:00",
+      "location": "线上拼团",
+      "publisher": "西校区 李同学",
+      "status": "open",
+      "description": "批发价团购当季水果，比校内水果店便宜 40%。"
+    }
+  ],
+  "errands": [
+    {
+      "id": 1,
+      "title": "帮取快递到宿舍楼下",
+      "taskType": "取快递",
+      "reward": 3,
+      "from": "菜鸟驿站",
+      "to": "西区 5 栋宿舍楼下",
+      "deadline": "2026-06-26 19:00",
+      "publisher": "西校区 张同学",
+      "status": "open",
+      "description": "两个小包裹，比较轻，送到宿舍楼下即可。"
+    },
+    {
+      "id": 2,
+      "title": "帮买一份晚餐",
+      "taskType": "代买",
+      "reward": 5,
+      "from": "二食堂一楼",
+      "to": "实验楼 302 实验室",
+      "deadline": "2026-06-26 18:30",
+      "publisher": "信息学院 李同学",
+      "status": "open",
+      "description": "一份麻辣烫加一杯奶茶，需要在 18:30 前送到实验室。"
+    },
+    {
+      "id": 3,
+      "title": "代送文件到行政楼",
+      "taskType": "代办",
+      "reward": 5,
+      "from": "计算机学院办公室",
+      "to": "行政楼教务处",
+      "deadline": "2026-06-27 16:00",
+      "publisher": "计算机学院 王同学",
+      "status": "open",
+      "description": "一份申请表需要盖章并提交，从计算机学院取件送到行政楼。"
+    },
+    {
+      "id": 4,
+      "title": "代排队买活动票",
+      "taskType": "代排队",
+      "reward": 15,
+      "from": "体育馆售票处",
+      "to": "线上交接",
+      "deadline": "2026-06-28 08:00",
+      "publisher": "东校区 刘同学",
+      "status": "open",
+      "description": "校园歌手大赛门票，需要早上排队购买，预计排队 1 小时左右。"
+    },
+    {
+      "id": 5,
+      "title": "代办校园卡补办业务",
+      "taskType": "代办",
+      "reward": 8,
+      "from": "信息中心",
+      "to": "南校区宿舍 2 号楼",
+      "deadline": "2026-06-27 16:30",
+      "publisher": "南校区 赵同学",
+      "status": "open",
+      "description": "帮忙去信息中心取号排队补办校园卡，办好后送到宿舍楼下。"
+    }
+  ]
+}

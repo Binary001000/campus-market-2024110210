@@ -54,19 +54,20 @@ const avatarColor = (name: string): string => {
   const colors = ['#4a90d9', '#52c41a', '#faad14', '#eb2f96', '#722ed1', '#13c2c2']
   let hash = 0
   for (const c of name) hash = (hash * 31 + c.charCodeAt(0)) | 0
-  return colors[Math.abs(hash) % colors.length]
+  return colors[Math.abs(hash) % colors.length]!
 }
 
 const getInitial = (name: string) => name.charAt(0)
 
 const handleSend = () => {
-  if (newMsg.value.trim() && activeConv.value) {
-    if (!messagesMap[activeConv.value.id]) {
-      messagesMap[activeConv.value.id] = []
+  const conv = activeConv.value
+  if (newMsg.value.trim() && conv) {
+    if (!messagesMap[conv.id]) {
+      messagesMap[conv.id] = []
     }
     const now = new Date()
     const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
-    messagesMap[activeConv.value.id].push({
+    messagesMap[conv.id]!.push({
       from: 'me',
       text: newMsg.value.trim(),
       time,

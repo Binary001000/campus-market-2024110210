@@ -938,3 +938,40 @@ AI 执行全部 12 项必须修改：
 ### 最终验证
 
 > *个人检测结果为符合day2要求*
+
+---
+
+## 协作记录 22 — Day 3 Prompt 1: db.json + JSON Server 搭建
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+Day3 Mock 数据建模任务：
+1. 创建 db.json，包含 trades/lostFounds/groupBuys/errands 四个独立集合
+2. 每类数据至少 5 条，内容贴近校园场景
+3. 添加 "mock": "json-server --watch db.json --port 3001" 到 package.json
+4. 安装 json-server 为开发依赖
+```
+
+---
+
+### AI 输出概要
+
+- **安装**：`pnpm add json-server -D` → json-server 1.0.0-beta.15
+- **db.json**：4 个数据集合，trades 6 条 / lostFounds 5 条 / groupBuys 5 条 / errands 5 条，共计 21 条数据
+- **数据内容**：机械键盘、高数教材、台灯、考研真题、iPad 壳、校园卡丢失、雨伞拾获、AirPods 丢失、火锅拼单、考研搭子、夜跑搭子、取快递、代买晚餐、代办文件等校园场景
+- **字段规范**：数值字段用 number，状态用 open/closed/done，图片字段空字符串
+- **mock 脚本**：已添加到 package.json scripts
+- **验证**：JSON Server 启动成功，`/trades` `/lostFounds` `/groupBuys` `/errands` 四个端点均可访问
+
+> **
+
+---
+
+### 最终验证
+
+> **
