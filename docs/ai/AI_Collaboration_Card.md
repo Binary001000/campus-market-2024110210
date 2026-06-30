@@ -1090,3 +1090,34 @@ Day3 Mock 数据建模任务：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 26 — Day 4 Prompt 1: API POST 方法 + FormField 组件
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. 为四个 API 模块补充 POST 方法（createTrade/createLostFound/createGroupBuy/createErrand），id 改为可选
+2. 创建 FormField.vue（Props: label/required?/error? + default 插槽）
+```
+
+---
+
+### AI 输出概要
+
+- **4 个 API POST**：trade.ts / lostFound.ts / groupBuy.ts / errand.ts 各新增 `createXxx(data)` 方法，`http.post()` 对应集合路径，接口中 `id` 改为 `id?: number`
+- **FormField.vue**：label 14px/500，红色 * 必填标识，底部红色 error 文字，默认插槽放置任意表单控件，flex-col + gap 8px 布局
+- `vue-tsc --noEmit` 零错误
+
+> **
+
+---
+
+### 最终验证
+
+> **
