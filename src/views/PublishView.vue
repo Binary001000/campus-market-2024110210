@@ -29,6 +29,10 @@
         <textarea v-model.trim="form.description" rows="5" placeholder="请简要描述具体情况"></textarea>
       </FormField>
 
+      <FormField label="图片地址">
+        <input v-model.trim="form.image" type="text" placeholder="请输入图片链接（可选）" />
+      </FormField>
+
       <!-- 二手交易专属字段 -->
       <template v-if="publishType === 'trade'">
         <FormField label="商品分类" required :error="errors.category">
@@ -44,6 +48,15 @@
             <option value="九成新">九成新</option>
             <option value="八成新">八成新</option>
             <option value="正常使用痕迹">正常使用痕迹</option>
+          </select>
+        </FormField>
+        <FormField label="校区" required :error="errors.campus">
+          <select v-model="form.campus">
+            <option value="">请选择校区</option>
+            <option value="北校区">北校区</option>
+            <option value="南校区">南校区</option>
+            <option value="东校区">东校区</option>
+            <option value="西校区">西校区</option>
           </select>
         </FormField>
       </template>
@@ -126,6 +139,8 @@ const form = reactive({
   title: '',
   location: '',
   description: '',
+  campus: '',
+  image: '',
   category: '',
   price: 0,
   condition: '',
@@ -160,6 +175,7 @@ function validateForm() {
     if (!form.category) errors.category = '请输入商品分类'
     if (form.price <= 0) errors.price = '价格应大于 0'
     if (!form.condition) errors.condition = '请选择商品成色'
+    if (!form.campus) errors.campus = '请选择校区'
   }
 
   if (publishType.value === 'lostFound') {
@@ -202,9 +218,10 @@ async function handleSubmit() {
         price: form.price,
         condition: form.condition,
         location: form.location,
+        campus: form.campus,
         publisher: '当前用户',
         publishTime: getCurrentTime(),
-        image: '',
+        image: form.image,
         status: 'open',
         description: form.description,
       })
@@ -270,6 +287,8 @@ function resetForm() {
   form.title = ''
   form.location = ''
   form.description = ''
+  form.campus = ''
+  form.image = ''
   form.category = ''
   form.price = 0
   form.condition = ''

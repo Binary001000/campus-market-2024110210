@@ -1147,6 +1147,78 @@ Day3 Mock 数据建模任务：
 - **提交**：handleSubmit() → createXxx() → alert + router.push()
 - **重置**：resetForm() 清空所有字段和错误
 - `vue-tsc --noEmit` 零错误
+- **跳转调整**：二手交易跳转 `/list`（而非 `/trade`，因项目已合并为二手集市）
+
+> **
+
+---
+
+### 最终验证
+
+> **
+
+---
+
+## 协作记录 28 — Day 4 Prompt 3: Evidence 填写
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+按 day4.txt 模板填写 Day4_Evidence.md，包含发布类型字段表格、校验规则、AI协作、测试记录、反思 ≥300字，含"发布表单""表单校验""数据新增"三个关键词
+```
+
+---
+
+### AI 输出概要
+
+按 day4.txt 模板输出完整证据卡（约 1100 字），包含：
+
+- 发布类型与字段设计表格（四类 + 关键字段 + 设计理由）
+- 15 项表单校验规则表（按类型分类）
+- AI 协作记录 + 审查表格
+- 人工调整（跳转路径、移除 Element Plus、固定 publisher）
+- 测试记录（3 条，待 Mock+Dev 启动验证）
+- 2 个问题（Element Plus 残留、跳转路径）
+- 今日反思（发布表单/表单校验/数据新增三要素 + 数据闭环链路）
+
+> **
+
+---
+
+### 最终验证
+
+> **
+
+---
+
+## 协作记录 29 — Day 4 后续修正: 校区+图片+数据驱动
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. 发布表单补充：校区(二手必填) + 图片地址(可选) + TradeItem 新增 campus 字段
+2. ListView 改为 API 驱动（onMounted 调用 getTrades，替换静态数组）
+3. DetailView 改为 API 驱动（getTradeById 按 id 获取，替换静态 itemMap）
+4. 新增 deleteTrade() + DetailView 删除按钮
+```
+
+---
+
+### AI 输出概要
+
+- **校区+图片**：PublishView 二手交易专属 campus select + 通用 image input，TradeItem 新增 campus 字段，非交易接口不包含 campus
+- **ListView 重写**：移除 8 条静态数据，onMounted 调用 getTrades() 获取 JSON Server 数据，筛选/排序/分页适配 API 字段（category/campus/status/publishTime）
+- **DetailView 重写**：移除静态 itemMap，onMounted 调用 getTradeById(id)，状态映射 open/closed/done，新增图片展示和校区信息
+- **删除功能**：API 新增 deleteTrade(id)，DetailView 底部"删除"按钮 + confirm 确认 + 成功后跳转 /list
+- 全部通过 vue-tsc 类型检查
 
 > **
 

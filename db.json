@@ -11,7 +11,8 @@
       "publishTime": "2026-06-20 10:20",
       "image": "",
       "status": "open",
-      "description": "87键紧凑布局，使用半年，手感很好，配件齐全，因换了无线键盘所以转让。"
+      "description": "87键紧凑布局，使用半年，手感很好，配件齐全，因换了无线键盘所以转让。",
+      "campus": "北校区"
     },
     {
       "id": 2,
@@ -24,7 +25,8 @@
       "publishTime": "2026-06-21 14:30",
       "image": "",
       "status": "open",
-      "description": "有少量笔记但不影响阅读，适合大一同学使用。"
+      "description": "有少量笔记但不影响阅读，适合大一同学使用。",
+      "campus": "南校区"
     },
     {
       "id": 3,
@@ -37,7 +39,8 @@
       "publishTime": "2026-06-22 09:15",
       "image": "",
       "status": "open",
-      "description": "LED 护眼台灯，三档亮度可调，无频闪，宿舍学习必备。"
+      "description": "LED 护眼台灯，三档亮度可调，无频闪，宿舍学习必备。",
+      "campus": "东校区"
     },
     {
       "id": 4,
@@ -50,7 +53,8 @@
       "publishTime": "2026-06-23 16:00",
       "image": "",
       "status": "open",
-      "description": "历年真题详解，含详细解析和答题技巧，已上岸故转让。"
+      "description": "历年真题详解，含详细解析和答题技巧，已上岸故转让。",
+      "campus": "西校区"
     },
     {
       "id": 5,
@@ -63,7 +67,8 @@
       "publishTime": "2026-06-24 11:40",
       "image": "",
       "status": "open",
-      "description": "买错了型号所以转让，全新未拆封，包装完好。"
+      "description": "买错了型号所以转让，全新未拆封，包装完好。",
+      "campus": "北校区"
     },
     {
       "id": 6,
@@ -76,7 +81,8 @@
       "publishTime": "2026-06-25 08:00",
       "image": "",
       "status": "done",
-      "description": "厚度6mm，只用过几次，适合在宿舍或操场锻炼使用。"
+      "description": "厚度6mm，只用过几次，适合在宿舍或操场锻炼使用。",
+      "campus": "南校区"
     }
   ],
   "lostFounds": [
