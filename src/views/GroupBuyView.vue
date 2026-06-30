@@ -5,7 +5,11 @@
       <p>找人一起拼，一起学，一起运动，校园生活更精彩。</p>
     </div>
 
-    <div v-if="groupBuys.length" class="list">
+    <div v-if="loading" class="loading-wrap">加载中...</div>
+
+    <div v-else-if="error" class="error-wrap">加载失败，请检查 Mock 服务是否正常运行</div>
+
+    <div v-else-if="groupBuys.length" class="list">
       <ItemCard
         v-for="item in groupBuys"
         :key="item.id"
@@ -33,10 +37,19 @@ import EmptyState from '../components/EmptyState.vue'
 import { getGroupBuys, type GroupBuyItem } from '../api/groupBuy'
 
 const groupBuys = ref<GroupBuyItem[]>([])
+const loading = ref(true)
+const error = ref(false)
 
 onMounted(async () => {
-  const res = await getGroupBuys()
-  groupBuys.value = res.data
+  try {
+    const res = await getGroupBuys()
+    groupBuys.value = res.data
+  } catch (e) {
+    console.error(e)
+    error.value = true
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
@@ -72,5 +85,16 @@ onMounted(async () => {
   margin-left: 12px;
   color: #6b7280;
   font-size: 13px;
+}
+
+.loading-wrap,
+.error-wrap {
+  text-align: center;
+  padding: 48px;
+  color: #9ca3af;
+}
+
+.error-wrap {
+  color: #ef4444;
 }
 </style>

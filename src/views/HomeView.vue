@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
+import { getTrades, type TradeItem } from '../api/trade'
 
 const entries = [
   { type: 'secondhand', label: '二手集市', icon: '🛒', desc: '闲置物品买卖', route: '/list' },
@@ -8,25 +10,28 @@ const entries = [
   { type: 'errand', label: '跑腿委托', icon: '🏃', desc: '代取快递 & 代办事务', route: '/errand' },
 ]
 
-const stats = [
-  { label: '在售商品', value: 326 },
+const trades = ref<TradeItem[]>([])
+
+onMounted(async () => {
+  try {
+    const res = await getTrades()
+    trades.value = res.data
+  } catch (e) { console.error(e) }
+})
+
+const stats = computed(() => [
+  { label: '在售商品', value: trades.value.filter(t => t.status === 'open').length },
   { label: '活跃用户', value: 1280 },
-  { label: '今日新增', value: 47 },
-]
+  { label: '今日新增', value: trades.value.length },
+])
 
-const latestItems = [
-  { id: 1, title: '《数据结构》教材 9成新', price: 25, type: '二手交易', time: '10 分钟前' },
-  { id: 2, title: '机械键盘 Cherry 青轴', price: 180, type: '二手交易', time: '25 分钟前' },
-  { id: 3, title: '台灯 LED 护眼', price: 35, type: '二手交易', time: '1 小时前' },
-  { id: 7, title: '蓝牙耳机 降噪版', price: 120, type: '二手交易', time: '5 小时前' },
-]
+const latestItems = computed(() =>
+  [...trades.value].sort((a, b) => b.publishTime.localeCompare(a.publishTime)).slice(0, 4)
+)
 
-const hotItems = [
-  { id: 1, title: '《数据结构》教材 9成新', price: 25, hot: '🔥 86人浏览' },
-  { id: 2, title: '机械键盘 Cherry 青轴', price: 180, hot: '🔥 64人浏览' },
-  { id: 7, title: '蓝牙耳机 降噪版', price: 120, hot: '🔥 51人浏览' },
-  { id: 3, title: '台灯 LED 护眼', price: 35, hot: '🔥 38人浏览' },
-]
+const hotItems = computed(() =>
+  [...trades.value].sort((a, b) => b.publishTime.localeCompare(a.publishTime)).slice(0, 4)
+)
 </script>
 
 <template>
@@ -87,8 +92,8 @@ const hotItems = [
             <RouterLink :to="`/detail/${item.id}`" class="latest-link">
               <span class="latest-title">{{ item.title }}</span>
               <span class="latest-meta">
-                <el-tag size="small">{{ item.type }}</el-tag>
-                <span class="latest-time">{{ item.time }}</span>
+                <el-tag size="small">{{ item.category }}</el-tag>
+                <span class="latest-time">{{ item.publishTime }}</span>
               </span>
               <span class="latest-price">¥{{ item.price }}</span>
             </RouterLink>
@@ -110,7 +115,7 @@ const hotItems = [
               <div class="hot-title">{{ item.title }}</div>
               <div class="hot-bottom">
                 <span class="hot-price">¥{{ item.price }}</span>
-                <span class="hot-meta">{{ item.hot }}</span>
+                <span class="hot-meta">{{ item.campus }}</span>
               </div>
             </RouterLink>
           </div>

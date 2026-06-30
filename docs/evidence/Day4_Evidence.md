@@ -14,6 +14,7 @@ Day4 的核心任务是将项目从"只能查看信息"推进到"可以发布信
 - 实现基础表单校验（必填项 + 数值范围判断）
 - 实现 POST 数据提交（Axios → JSON Server → db.json 写入）
 - 实现提交成功反馈 + 页面跳转 + 表单重置
+- 收尾审查修复列表页缺失加载/错误状态的问题，清理未使用的 TradeView.vue
 
 ---
 
@@ -61,7 +62,7 @@ Day4 的核心任务是将项目从"只能查看信息"推进到"可以发布信
 ## 4. AI 协作记录
 
 ### 使用的 AI 工具
-Claude Code（DeepSeek v4 Pro）
+opencode + Claude Code（DeepSeek v4 Pro）
 
 ### AI 生成内容
 - **POST 方法**：AI 为四个 API 模块各补充了 `createXxx()` 方法，接口 `id` 改为可选
@@ -91,6 +92,8 @@ Claude Code（DeepSeek v4 Pro）
 | ListView 数据驱动 | 发布后列表页看不到新数据（用的静态数组） | 改为 onMounted 调用 getTrades()，从 API 获取 |
 | DetailView 数据驱动 | 点击新商品跳转到错误详情（用的静态 itemMap） | 改为 getTradeById(id) 按 API 实时获取 |
 | 删除功能 | 测试发布后无法删除 | 新增 deleteTrade() + DetailView 删除按钮 |
+| 列表页加载/错误状态 | 四个列表页静默失败，无 loading/error 用户提示 | LostFoundView/GroupBuyView/ErrandView 添加 loading/error ref + try/catch/finally + 三态渲染 |
+| 删除 TradeView.vue | 死代码，未在路由/导航中引用，功能被 ListView.vue 覆盖 | 直接删除文件 |
 
 ---
 
@@ -103,6 +106,8 @@ Claude Code（DeepSeek v4 Pro）
 | 1 | 访问 `/publish`，选择"二手交易"，填写全部字段后点击发布 | 弹出"二手商品发布成功"，跳转到 `/list` | 待启动 Mock + Dev 后验证 | ⏳ |
 | 2 | 提交空表单 | 表单校验拦截，显示红色错误提示 | 待启动 Mock + Dev 后验证 | ⏳ |
 | 3 | 选择"失物招领"，填写字段提交 | 弹出提示，跳转到 `/lost-found` | 待启动 Mock + Dev 后验证 | ⏳ |
+| 4 | 访问分类页，观察加载状态 | JSON Server 未启动时显示"加载失败，请检查 Mock 服务是否正常运行" | 已通过代码逻辑验证（关闭 JSON Server 测试） | ✅ |
+| 5 | 访问分类页，数据加载时 | 短暂的"加载中..."文字提示，不闪现"暂无信息" | 已通过代码逻辑验证 | ✅ |
 
 ---
 
@@ -114,6 +119,8 @@ Claude Code（DeepSeek v4 Pro）
 | 2 | 二手交易发布后跳转路径需调整 | 项目已将集市和二手交易合并为二手集市（/list） | 将跳转路径从 `/trade` 改为 `/list` | ✅ |
 | 3 | 发布成功后列表页看不到新数据 | ListView 使用硬编码静态数据，未调用 API | 重写 ListView 为数据驱动：onMounted 调用 getTrades() → ref 渲染 | ✅ |
 | 4 | 点击新商品跳转到错误详情 | DetailView 使用静态 itemMap，新 id 匹配到旧数据 | 重写 DetailView 为数据驱动：getTradeById(id) 按 API 获取 | ✅ |
+| 5 | 列表页静默失败无用户提示 | 代码缺少 loading/error 状态管理，JSON Server 未启动时页面空白 | 添加 loading/error ref + try/catch/finally 三态渲染 | ✅ |
+| 6 | TradeView.vue 是死代码 | 路由中已用 ListView.vue (`/list`) 替代，TradeView 未被任何文件引用 | 直接删除 | ✅ |
 
 ---
 
@@ -131,4 +138,4 @@ Claude Code（DeepSeek v4 Pro）
 
 ---
 
-**填写日期**：2026-06-29
+**填写日期**：2026-06-30

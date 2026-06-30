@@ -5,7 +5,11 @@
       <p>丢失物品别着急，拾获物品等失主，互助让校园更温暖。</p>
     </div>
 
-    <div v-if="lostFounds.length" class="list">
+    <div v-if="loading" class="loading-wrap">加载中...</div>
+
+    <div v-else-if="error" class="error-wrap">加载失败，请检查 Mock 服务是否正常运行</div>
+
+    <div v-else-if="lostFounds.length" class="list">
       <ItemCard
         v-for="item in lostFounds"
         :key="item.id"
@@ -33,10 +37,19 @@ import EmptyState from '../components/EmptyState.vue'
 import { getLostFounds, type LostFoundItem } from '../api/lostFound'
 
 const lostFounds = ref<LostFoundItem[]>([])
+const loading = ref(true)
+const error = ref(false)
 
 onMounted(async () => {
-  const res = await getLostFounds()
-  lostFounds.value = res.data
+  try {
+    const res = await getLostFounds()
+    lostFounds.value = res.data
+  } catch (e) {
+    console.error(e)
+    error.value = true
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
@@ -87,5 +100,16 @@ onMounted(async () => {
 
 .status.done {
   color: #4a90d9;
+}
+
+.loading-wrap,
+.error-wrap {
+  text-align: center;
+  padding: 48px;
+  color: #9ca3af;
+}
+
+.error-wrap {
+  color: #ef4444;
 }
 </style>

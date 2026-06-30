@@ -1224,6 +1224,52 @@ Day3 Mock 数据建模任务：
 
 ---
 
+## 协作记录 30 — Day 4 收尾审查: 列表页加载状态 + 死代码清理
+
+**日期**：2026-06-30
+**AI 工具**：opencode
+
+---
+
+### Prompt
+
+```
+对 Day4 项目进行代码审查，发现以下问题并修复：
+
+1. 四个列表页（TradeView/LostFoundView/GroupBuyView/ErrandView）
+   发起请求时没有任何 loading/error 状态，JSON Server 未启动时页面静默失败
+
+2. TradeView.vue 未在任何路由中注册，是死代码（功能已被 ListView.vue 覆盖）
+
+请修复：
+- 为 LostFoundView/GroupBuyView/ErrandView 添加三态渲染（loading / error / list / empty）
+- 删除 TradeView.vue
+```
+
+---
+
+### AI 输出概要
+
+AI 审查了所有列表页源码，发现：
+
+1. **三列表页缺失加载/错误状态**：LostFoundView/GroupBuyView/ErrandView 的 `onMounted` 直接 `await` 调用，无 `try/catch`，无 `loading` 状态，数据加载前会闪现"暂无信息"。修复方案：
+   - 每页新增 `loading` 和 `error` 两个 `ref`
+   - `onMounted` 改为 `try/catch/finally` 结构
+   - 模板改为三态：`v-if="loading"` → `v-else-if="error"` → `v-else-if="items.length"` → `<EmptyState>`
+   - 添加 `.loading-wrap` 和 `.error-wrap` CSS 样式
+
+2. **死代码清理**：`TradeView.vue` 未在路由/导航中被引用，功能完全被 `ListView.vue`（`/list`）覆盖，直接删除。
+
+3. **验证**：`vue-tsc --build` 类型检查通过，零错误。
+
+---
+
+### 自己修改
+
+> **（无）AI 一次性完成所有修改，无需人工修正。**
+
+---
+
 ### 最终验证
 
-> **
+> **类型检查 vue-tsc --build 通过，三个列表页的加载/错误/空数据三态逻辑完整可用。**
