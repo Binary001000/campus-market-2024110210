@@ -1121,3 +1121,37 @@ Day3 Mock 数据建模任务：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 27 — Day 4 Prompt 2: PublishView 发布表单
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+重写 PublishView.vue：原生 HTML 表单 + 类型切换 + 动态字段 + 校验 + POST + 跳转 + 重置
+```
+
+---
+
+### AI 输出概要
+
+- **类型选择**：select 四选一（trade/lostFound/groupBuy/errand）
+- **通用字段**：标题/地点/描述（FormField + 必填校验）
+- **四类专属字段**：v-if 动态切换，二手(分类/价格/成色)、失物(类型/物品/时间)、拼单(类型/人数/截止)、跑腿(类型/酬劳/起止点/截止)
+- **校验**：validateForm() 按类型分类校验，errors 对象存储
+- **提交**：handleSubmit() → createXxx() → alert + router.push()
+- **重置**：resetForm() 清空所有字段和错误
+- `vue-tsc --noEmit` 零错误
+
+> **
+
+---
+
+### 最终验证
+
+> **
