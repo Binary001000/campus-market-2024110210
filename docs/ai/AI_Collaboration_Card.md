@@ -1273,3 +1273,35 @@ AI 审查了所有列表页源码，发现：
 ### 最终验证
 
 > **类型检查 vue-tsc --build 通过，三个列表页的加载/错误/空数据三态逻辑完整可用。**
+
+---
+
+## 协作记录 30 — Day 5 Prompt 1: Pinia Store 创建
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. 创建 src/stores/user.ts：defineStore('user', Options API)，State(isLoggedIn + currentUser)，Getters(displayName/userDescription)，Actions(updateProfile/login/logout)
+2. 创建 src/stores/favorite.ts：defineStore('favorite', Options API)，State(favorites[])，Getters(favoriteCount)，Actions(isFavorite/addFavorite/removeFavorite/toggleFavorite)
+要求不引入登录鉴权/JWT/后端认证
+```
+
+---
+
+### AI 输出概要
+
+- **user.ts**：模拟用户(name="校园用户"/college="计算机学院"/grade="2023级")，getters 计算 displayName 和 userDescription，actions 支持 updateProfile/login/logout
+- **favorite.ts**：FavoriteItem 接口(id/type/title/description/location)，type 类型为 'trade'|'lostFound'|'groupBuy'|'errand'，toggleFavorite 自动判断添加/移除
+- `vue-tsc --noEmit` 零错误
+
+> **（无）**
+
+---
+
+### 最终验证
+
+> **
