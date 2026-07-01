@@ -1329,7 +1329,7 @@ AI 审查了所有列表页源码，发现：
 
 - **AppHeader**：导入 useUserStore，导航栏右侧显示 `userStore.displayName`
 - **PublishView**：3 处 publisher 值从硬编码改为 `userStore.displayName`
-- **UserCenterView**：完整重写，用户资料从 userStore 读取（首字头像+姓名+学院/年级+bio），收藏用 favoriteStore.favorites 遍历 + ItemCard + 取消收藏按钮，收藏数量绑定 favoriteCount，我的发布区保留结构占位
+- **UserCenterView**：完整重写，用户资料从 userStore 读取（首字头像+姓名+学院/年级+bio），收藏用 favoriteStore.favorites 遍历 + ItemCard + 取消收藏按钮，收藏数量绑定 favoriteCount，我的发布区 Promise.all 四种 API + computed 筛选
 - `vue-tsc --noEmit` 零错误
 
 > **（无）**
@@ -1339,3 +1339,78 @@ AI 审查了所有列表页源码，发现：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 32 — Day 5 Prompt 3: Evidence 填写 + 我的发布
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. 实现我的发布：Promise.all 请求四类数据 → computed 按 publisher 筛选
+2. 按 day5.txt 模板填写 Day5_Evidence.md
+```
+
+---
+
+### AI 输出概要
+
+- **我的发布**：`onMounted → Promise.all` 并行请求 4 API，`computed` 按 `publisher === userStore.displayName` 筛选（lostFound 用 contact），标签切换发布/收藏
+- **Evidence**：~1500 字，含 Store 设计表/状态边界表/页面使用表/AI 协作/人工调整/测试/3 问题/反思
+
+> **（无）**
+
+---
+
+### 最终验证
+
+> **
+
+---
+
+## 协作记录 33 — Day 5 Wrap-up: 代码审查与 Bug 修复
+
+**日期**：2026-07-01
+
+---
+
+### Prompt
+
+```
+对 Day5 进行收尾代码审查，发现并修复以下问题：
+1. LostFoundItem 接口缺少 publisher 字段，UserCenterView 用 l.contact 筛选但发布时 contact 写死为"站内消息联系" → 永远匹配不到当前用户
+2. AppHeader 未判断 isLoggedIn 状态
+3. ListView 收藏按钮使用 item.id! 非空断言
+4. PublishView 多处 window.alert 应替换为 ElMessage
+5. resetForm 逐字段手动重置可优化为 getInitialForm 工厂函数
+6. UserCenterView 类型声明过于复杂
+```
+
+---
+
+### AI 输出概要
+
+AI 修复了 6 个文件：
+
+- **src/api/lostFound.ts**：接口新增 `publisher: string` 字段
+- **src/views/PublishView.vue**：发布失物招领时传入 `publisher: userStore.displayName`；全部 `window.alert` → `ElMessage.success/error`；提取 `getInitialForm()` 工厂函数，`resetForm` 简化为 `Object.assign(form, getInitialForm())`
+- **src/views/UserCenterView.vue**：筛选条件 `l.contact` → `l.publisher`；类型 `Awaited<ReturnType<...>>['data']` → 直接使用 `TradeItem[]` 等具体类型；filter+forEach → filter+map 链式调用
+- **src/components/AppHeader.vue**：用户名加 `v-if="userStore.isLoggedIn"` 条件渲染，未登录显示"未登录"
+- **src/views/ListView.vue**：`item.id!` → `item.id &&` 守卫
+- **docs/evidence/Day5_Evidence.md**：更新人工调整项、测试记录、问题表和反思段落
+
+---
+
+### 自己修改
+
+> **全部由 AI 一次性完成，无额外人工修改。oxlint 0 错误 0 警告，vue-tsc --build 0 错误。提交信息："Day5 wrap-up: fix lostFound publisher bug + code quality improvements"**
+
+---
+
+### 最终验证
+
+> **代码审查通过，类型检查通过，lint 通过，git commit 8c69ad5 成功。**
