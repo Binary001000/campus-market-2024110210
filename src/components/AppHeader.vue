@@ -8,7 +8,8 @@
     <AppNav />
 
     <div class="user-mini">
-      <span>{{ userStore.displayName }}</span>
+      <span v-if="userStore.isLoggedIn">{{ userStore.displayName }}</span>
+      <span v-else>未登录</span>
     </div>
   </header>
 </template>

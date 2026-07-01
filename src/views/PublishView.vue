@@ -124,6 +124,7 @@
 // 发布表单页 — 四类业务类型切换 + 动态字段 + 表单校验 + POST 提交
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import FormField from '../components/FormField.vue'
 import { useUserStore } from '../stores/user'
 import { createTrade } from '../api/trade'
@@ -139,26 +140,30 @@ const publishType = ref<PublishType>('trade')  // 当前发布类型
 const submitting = ref(false)                   // 提交中状态
 
 // 统一表单数据（包含四类业务的所有字段）
-const form = reactive({
-  title: '',
-  location: '',
-  description: '',
-  campus: '',
-  image: '',
-  category: '',
-  price: 0,
-  condition: '',
-  lostFoundType: 'lost',
-  itemName: '',
-  eventTime: '',
-  groupType: '',
-  targetCount: 2,
-  deadline: '',
-  taskType: '',
-  reward: 0,
-  from: '',
-  to: '',
-})
+function getInitialForm() {
+  return {
+    title: '',
+    location: '',
+    description: '',
+    campus: '',
+    image: '',
+    category: '',
+    price: 0,
+    condition: '',
+    lostFoundType: 'lost',
+    itemName: '',
+    eventTime: '',
+    groupType: '',
+    targetCount: 2,
+    deadline: '',
+    taskType: '',
+    reward: 0,
+    from: '',
+    to: '',
+  }
+}
+
+const form = reactive(getInitialForm())
 
 // 校验错误信息
 const errors = reactive<Record<string, string>>({})
@@ -238,7 +243,7 @@ async function handleSubmit() {
         status: 'open',
         description: form.description,
       })
-      window.alert('二手商品发布成功')
+      ElMessage.success('二手商品发布成功')
       router.push('/list')
     }
 
@@ -250,10 +255,11 @@ async function handleSubmit() {
         location: form.location,
         eventTime: form.eventTime,
         contact: '站内消息联系',
+        publisher: userStore.displayName,
         status: 'open',
         description: form.description,
       })
-      window.alert('失物招领信息发布成功')
+      ElMessage.success('失物招领信息发布成功')
       router.push('/lost-found')
     }
 
@@ -269,7 +275,7 @@ async function handleSubmit() {
         status: 'open',
         description: form.description,
       })
-      window.alert('拼单搭子信息发布成功')
+      ElMessage.success('拼单搭子信息发布成功')
       router.push('/group-buy')
     }
 
@@ -285,12 +291,12 @@ async function handleSubmit() {
         status: 'open',
         description: form.description,
       })
-      window.alert('跑腿委托发布成功')
+      ElMessage.success('跑腿委托发布成功')
       router.push('/errand')
     }
   } catch (error) {
     console.error(error)
-    window.alert('发布失败，请检查 Mock 服务是否正常运行')
+    ElMessage.error('发布失败，请检查 Mock 服务是否正常运行')
   } finally {
     submitting.value = false
   }
@@ -298,24 +304,7 @@ async function handleSubmit() {
 
 // 重置所有表单字段和校验错误
 function resetForm() {
-  form.title = ''
-  form.location = ''
-  form.description = ''
-  form.campus = ''
-  form.image = ''
-  form.category = ''
-  form.price = 0
-  form.condition = ''
-  form.lostFoundType = 'lost'
-  form.itemName = ''
-  form.eventTime = ''
-  form.groupType = ''
-  form.targetCount = 2
-  form.deadline = ''
-  form.taskType = ''
-  form.reward = 0
-  form.from = ''
-  form.to = ''
+  Object.assign(form, getInitialForm())
   clearErrors()
 }
 </script>

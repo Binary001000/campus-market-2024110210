@@ -129,15 +129,15 @@ const pagedItems = computed(() => {
                   <span class="item-time">{{ item.publishTime }}</span>
                   <button
                     class="fav-btn"
-                    @click.prevent="favoriteStore.toggleFavorite({
-                      id: item.id!,
+                    @click.prevent="item.id && favoriteStore.toggleFavorite({
+                      id: item.id,
                       type: 'trade',
                       title: item.title,
                       description: item.description,
                       location: item.location
                     })"
                   >
-                    {{ favoriteStore.isFavorite('trade', item.id!) ? '❤️ 已收藏' : '🤍 收藏' }}
+                    {{ item.id && favoriteStore.isFavorite('trade', item.id) ? '❤️ 已收藏' : '🤍 收藏' }}
                   </button>
                 </div>
               </div>
