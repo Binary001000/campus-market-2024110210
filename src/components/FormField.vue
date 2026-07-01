@@ -12,6 +12,7 @@
 </template>
 
 <script setup lang="ts">
+// 组件 Props：label=字段标签, required=显示红色*, error=校验提示
 defineProps<{
   label: string
   required?: boolean

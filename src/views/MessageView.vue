@@ -1,7 +1,9 @@
 <script setup lang="ts">
+// 消息中心 — 左右双栏布局（会话列表 + 聊天区），纯前端 Mock 数据
 import { ref, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 
+// 会话列表数据（Mock）
 const conversations = [
   { id: 1, user: '张同学', college: '计算机学院', lastMsg: '好的，图书馆门口见', time: '10:30', unread: 2, item: '《数据结构》教材' },
   { id: 2, user: '李同学', college: '信息学院', lastMsg: '可以便宜点吗？最低多少出？', time: '昨天', unread: 0, item: '机械键盘' },
@@ -10,9 +12,10 @@ const conversations = [
   { id: 5, user: '刘同学', college: '体育学院', lastMsg: '周末有空来拿', time: '周一', unread: 0, item: '瑜伽垫' },
 ]
 
-const convSearch = ref('')
-const activeConv = ref(conversations[0])
+const convSearch = ref('')          // 会话搜索关键字
+const activeConv = ref(conversations[0])  // 当前选中的会话
 
+// 根据搜索关键字过滤会话
 const filteredConvs = computed(() => {
   if (!convSearch.value) return conversations
   const q = convSearch.value.toLowerCase()
@@ -21,6 +24,7 @@ const filteredConvs = computed(() => {
   )
 })
 
+// 消息内容数据（按会话 id 索引）
 const messagesMap: Record<number, { from: string; text: string; time: string }[]> = {
   1: [
     { from: 'other', text: '你好，请问教材还在吗？', time: '10:15' },
@@ -48,8 +52,9 @@ const currentMessages = computed(() => {
   return messagesMap[activeConv.value.id] || []
 })
 
-const newMsg = ref('')
+const newMsg = ref('')  // 输入框消息内容
 
+// 根据用户名字哈希生成彩色头像背景色
 const avatarColor = (name: string): string => {
   const colors = ['#4a90d9', '#52c41a', '#faad14', '#eb2f96', '#722ed1', '#13c2c2']
   let hash = 0
@@ -59,6 +64,7 @@ const avatarColor = (name: string): string => {
 
 const getInitial = (name: string) => name.charAt(0)
 
+// 发送消息：追加到当前会话的消息列表
 const handleSend = () => {
   const conv = activeConv.value
   if (newMsg.value.trim() && conv) {

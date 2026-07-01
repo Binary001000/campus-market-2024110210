@@ -3,7 +3,7 @@
     <AppHeader />
 
     <main class="app-main">
-      <RouterView />
+      <RouterView />  <!-- 路由视图插槽，匹配当前 URL 渲染对应页面 -->
     </main>
   </div>
 </template>

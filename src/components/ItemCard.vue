@@ -20,11 +20,11 @@
 
 <script setup lang="ts">
 defineProps<{
-  title: string
-  description: string
-  tag?: string
-  location?: string
-  time?: string
+  title: string        // 卡片标题
+  description: string   // 卡片描述
+  tag?: string          // 右上角标签（如分类名）
+  location?: string     // 地点
+  time?: string         // 时间
 }>()
 </script>
 

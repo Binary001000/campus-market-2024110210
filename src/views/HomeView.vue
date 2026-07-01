@@ -1,8 +1,10 @@
 <script setup lang="ts">
+// 首页 — 展示 Hero Banner + 四类业务入口 + 统计数据 + 最新发布/热门推荐
 import { ref, onMounted, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { getTrades, type TradeItem } from '../api/trade'
 
+// 四类业务入口配置
 const entries = [
   { type: 'secondhand', label: '二手集市', icon: '🛒', desc: '闲置物品买卖', route: '/list' },
   { type: 'lostfound', label: '失物招领', icon: '🔍', desc: '丢失 & 拾获互助', route: '/lost-found' },
@@ -10,6 +12,7 @@ const entries = [
   { type: 'errand', label: '跑腿委托', icon: '🏃', desc: '代取快递 & 代办事务', route: '/errand' },
 ]
 
+// 数据驱动：从 API 获取二手商品数据用于首页展示
 const trades = ref<TradeItem[]>([])
 
 onMounted(async () => {
@@ -19,16 +22,19 @@ onMounted(async () => {
   } catch (e) { console.error(e) }
 })
 
+// 统计数据：基于 API 实时数据计算
 const stats = computed(() => [
   { label: '在售商品', value: trades.value.filter(t => t.status === 'open').length },
   { label: '活跃用户', value: 1280 },
   { label: '今日新增', value: trades.value.length },
 ])
 
+// 最新发布：按时间倒序取前 4 条
 const latestItems = computed(() =>
   [...trades.value].sort((a, b) => b.publishTime.localeCompare(a.publishTime)).slice(0, 4)
 )
 
+// 热门推荐：取前 4 条（当前与最新发布逻辑一致，可替换为热度排序）
 const hotItems = computed(() =>
   [...trades.value].sort((a, b) => b.publishTime.localeCompare(a.publishTime)).slice(0, 4)
 )

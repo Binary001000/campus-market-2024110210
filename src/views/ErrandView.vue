@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+// 跑腿委托列表页 — 从 JSON Server 获取数据并展示 ItemCard 卡片列表
 import { onMounted, ref } from 'vue'
 import ItemCard from '../components/ItemCard.vue'
 import EmptyState from '../components/EmptyState.vue'

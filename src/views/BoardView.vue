@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 数据看板 — 统计卡片 + 环形图 + 柱状图 + TOP5 + 时间线（纯静态展示）
 import { ref } from 'vue'
 import { WarningFilled } from '@element-plus/icons-vue'
 
@@ -45,6 +46,7 @@ const timeline = [
   { time: '2 小时前', text: '赵同学收藏了考研英语真题集' },
 ]
 
+// 排名颜色：金银铜 → 灰色
 const rankColor = (rank: number): string => {
   if (rank === 1) return '#f59e0b'
   if (rank === 2) return '#9ca3af'

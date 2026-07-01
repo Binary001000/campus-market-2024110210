@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 404 页面 — 渐变文字 + 返回首页/上一页按钮
 import { ArrowLeft, HomeFilled } from '@element-plus/icons-vue'
 </script>
 

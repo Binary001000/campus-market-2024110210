@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 个人中心（Element Plus 版）— Hero 卡片 + 数据概览 + el-tabs 发布/收藏 + 设置区
 import { ref } from 'vue'
 import { Edit, Right } from '@element-plus/icons-vue'
 
@@ -31,6 +32,7 @@ const myFavorites = [
 
 const activeTab = ref('publishes')
 
+// 根据发布类型返回 el-tag 颜色
 const typeTagColor = (type: string): '' | 'success' | 'warning' | 'danger' | 'info' => {
   const map: Record<string, '' | 'success' | 'warning' | 'danger' | 'info'> = {
     '二手交易': '', '失物招领': 'warning', '拼单搭子': 'success', '跑腿委托': 'danger',
@@ -38,6 +40,7 @@ const typeTagColor = (type: string): '' | 'success' | 'warning' | 'danger' | 'in
   return map[type] || ''
 }
 
+// 更新发布状态（仅本地状态变更，未调用 API）
 const emitStatusUpdate = (itemId: number, newStatus: string) => {
   const item = myPublishes.find(i => i.id === itemId)
   if (item) item.status = newStatus

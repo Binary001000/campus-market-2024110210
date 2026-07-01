@@ -4,12 +4,14 @@ import HomeView from '@/views/HomeView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // 首页
     {
       path: '/',
       name: 'home',
       component: HomeView,
       meta: { title: '首页' },
     },
+    // 四类业务页面
     {
       path: '/lost-found',
       name: 'lostFound',
@@ -28,6 +30,7 @@ const router = createRouter({
       component: () => import('../views/ErrandView.vue'),
       meta: { title: '跑腿委托' },
     },
+    // 功能页面
     {
       path: '/publish',
       name: 'publish',
@@ -46,6 +49,7 @@ const router = createRouter({
       component: () => import('../views/UserCenterView.vue'),
       meta: { title: '个人中心' },
     },
+    // 二手集市 + 详情页
     {
       path: '/list',
       name: 'list',
@@ -58,12 +62,14 @@ const router = createRouter({
       component: () => import('../views/DetailView.vue'),
       meta: { title: '商品详情' },
     },
+    // 数据看板
     {
       path: '/board',
       name: 'board',
       component: () => import('../views/BoardView.vue'),
       meta: { title: '数据看板' },
     },
+    // 404 兜底（必须放在最后）
     {
       path: '/:pathMatch(.*)*',
       name: 'notFound',

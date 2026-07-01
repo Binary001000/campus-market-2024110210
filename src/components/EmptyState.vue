@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+// 组件 Props：空状态时显示的提示文案
 defineProps<{
   text: string
 }>()
