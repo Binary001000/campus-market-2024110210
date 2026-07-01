@@ -1,9 +1,14 @@
 <script setup lang="ts">
+// 二手集市列表页 — 支持搜索、校区筛选、状态筛选、价格排序、分页
 import { ref, computed, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { getTrades, type TradeItem } from '../api/trade'
 import EmptyState from '../components/EmptyState.vue'
+import { useFavoriteStore } from '../stores/favorite'
 
+const favoriteStore = useFavoriteStore()
+
+// 数据加载
 const items = ref<TradeItem[]>([])
 const loading = ref(true)
 
@@ -18,6 +23,7 @@ onMounted(async () => {
   }
 })
 
+// 筛选条件状态
 const searchQuery = ref('')
 const selectedCampus = ref('全部校区')
 const selectedSort = ref('最新发布')
@@ -25,11 +31,13 @@ const selectedStatus = ref('全部状态')
 const currentPage = ref(1)
 const pageSize = 4
 
+// 筛选选项配置
 const campusOptions = ['全部校区', '北校区', '南校区', '东校区', '西校区']
 const sortOptions = ['最新发布', '价格↑', '价格↓']
 const statusOptions = ['全部状态', 'open', 'closed', 'done']
 const statusLabels: Record<string, string> = { open: '进行中', closed: '已关闭', done: '已完成' }
 
+// 筛选 + 排序（响应式计算）
 const filteredItems = computed(() => {
   let result = [...items.value]
   if (searchQuery.value) {
@@ -51,6 +59,7 @@ const filteredItems = computed(() => {
   return result
 })
 
+// 分页切片
 const pagedItems = computed(() => {
   const start = (currentPage.value - 1) * pageSize
   return filteredItems.value.slice(start, start + pageSize)
@@ -101,7 +110,7 @@ const pagedItems = computed(() => {
           <el-card shadow="hover" class="item-card">
             <div class="item-layout">
               <div class="item-thumb">
-                <img v-if="item.image" :src="item.image" alt="" class="thumb-img" />
+                <img v-if="item.image" :src="item.image" alt="" class="thumb-img" referrerpolicy="no-referrer" />
                 <span v-else class="thumb-icon">📷</span>
               </div>
               <div class="item-body">
@@ -118,6 +127,18 @@ const pagedItems = computed(() => {
                     <span class="status-text">{{ statusLabels[item.status] || item.status }}</span>
                   </div>
                   <span class="item-time">{{ item.publishTime }}</span>
+                  <button
+                    class="fav-btn"
+                    @click.prevent="favoriteStore.toggleFavorite({
+                      id: item.id!,
+                      type: 'trade',
+                      title: item.title,
+                      description: item.description,
+                      location: item.location
+                    })"
+                  >
+                    {{ favoriteStore.isFavorite('trade', item.id!) ? '❤️ 已收藏' : '🤍 收藏' }}
+                  </button>
                 </div>
               </div>
             </div>

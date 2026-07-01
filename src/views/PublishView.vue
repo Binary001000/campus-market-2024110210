@@ -121,9 +121,11 @@
 </template>
 
 <script setup lang="ts">
+// 发布表单页 — 四类业务类型切换 + 动态字段 + 表单校验 + POST 提交
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import FormField from '../components/FormField.vue'
+import { useUserStore } from '../stores/user'
 import { createTrade } from '../api/trade'
 import { createLostFound } from '../api/lostFound'
 import { createGroupBuy } from '../api/groupBuy'
@@ -132,9 +134,11 @@ import { createErrand } from '../api/errand'
 type PublishType = 'trade' | 'lostFound' | 'groupBuy' | 'errand'
 
 const router = useRouter()
-const publishType = ref<PublishType>('trade')
-const submitting = ref(false)
+const userStore = useUserStore()
+const publishType = ref<PublishType>('trade')  // 当前发布类型
+const submitting = ref(false)                   // 提交中状态
 
+// 统一表单数据（包含四类业务的所有字段）
 const form = reactive({
   title: '',
   location: '',
@@ -156,6 +160,7 @@ const form = reactive({
   to: '',
 })
 
+// 校验错误信息
 const errors = reactive<Record<string, string>>({})
 
 function clearErrors() {
@@ -164,13 +169,16 @@ function clearErrors() {
   })
 }
 
+// 按当前发布类型执行分类校验
 function validateForm() {
   clearErrors()
 
+  // 通用必填项
   if (!form.title) errors.title = '请输入标题'
   if (!form.location) errors.location = '请输入地点'
   if (!form.description) errors.description = '请输入描述'
 
+  // 二手交易专属校验
   if (publishType.value === 'trade') {
     if (!form.category) errors.category = '请输入商品分类'
     if (form.price <= 0) errors.price = '价格应大于 0'
@@ -178,17 +186,20 @@ function validateForm() {
     if (!form.campus) errors.campus = '请选择校区'
   }
 
+  // 失物招领专属校验
   if (publishType.value === 'lostFound') {
     if (!form.itemName) errors.itemName = '请输入物品名称'
     if (!form.eventTime) errors.eventTime = '请选择发生时间'
   }
 
+  // 拼单搭子专属校验
   if (publishType.value === 'groupBuy') {
     if (!form.groupType) errors.groupType = '请输入拼单类型'
     if (form.targetCount < 2) errors.targetCount = '目标人数不能少于 2 人'
     if (!form.deadline) errors.deadline = '请选择截止时间'
   }
 
+  // 跑腿委托专属校验
   if (publishType.value === 'errand') {
     if (!form.taskType) errors.taskType = '请输入任务类型'
     if (form.reward < 0) errors.reward = '酬劳不能为负数'
@@ -200,11 +211,13 @@ function validateForm() {
   return Object.values(errors).every((message) => !message)
 }
 
+// 获取当前时间字符串（YYYY-MM-DD HH:mm 格式）
 function getCurrentTime() {
   const now = new Date()
   return now.toISOString().slice(0, 16).replace('T', ' ')
 }
 
+// 提交表单：校验 → 按类型选择对应 API → POST → 跳转
 async function handleSubmit() {
   if (!validateForm()) return
 
@@ -219,7 +232,7 @@ async function handleSubmit() {
         condition: form.condition,
         location: form.location,
         campus: form.campus,
-        publisher: '当前用户',
+        publisher: userStore.displayName,
         publishTime: getCurrentTime(),
         image: form.image,
         status: 'open',
@@ -252,7 +265,7 @@ async function handleSubmit() {
         currentCount: 1,
         deadline: form.deadline,
         location: form.location,
-        publisher: '当前用户',
+        publisher: userStore.displayName,
         status: 'open',
         description: form.description,
       })
@@ -268,7 +281,7 @@ async function handleSubmit() {
         from: form.from,
         to: form.to,
         deadline: form.deadline,
-        publisher: '当前用户',
+        publisher: userStore.displayName,
         status: 'open',
         description: form.description,
       })
@@ -283,6 +296,7 @@ async function handleSubmit() {
   }
 }
 
+// 重置所有表单字段和校验错误
 function resetForm() {
   form.title = ''
   form.location = ''

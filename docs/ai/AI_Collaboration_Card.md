@@ -1305,3 +1305,37 @@ AI 审查了所有列表页源码，发现：
 ### 最终验证
 
 > **
+
+---
+
+## 协作记录 31 — Day 5 Prompt 2: 跨页面集成 Store
+
+**日期**：2026-06-29
+
+---
+
+### Prompt
+
+```
+1. AppHeader 显示 userStore.displayName
+2. PublishView publisher 从 '当前用户' 改为 userStore.displayName
+3. ListView 卡片添加收藏按钮（toggleFavorite + isFavorite）
+4. UserCenterView 重写：userStore + favoriteStore + ItemCard 显示收藏
+```
+
+---
+
+### AI 输出概要
+
+- **AppHeader**：导入 useUserStore，导航栏右侧显示 `userStore.displayName`
+- **PublishView**：3 处 publisher 值从硬编码改为 `userStore.displayName`
+- **UserCenterView**：完整重写，用户资料从 userStore 读取（首字头像+姓名+学院/年级+bio），收藏用 favoriteStore.favorites 遍历 + ItemCard + 取消收藏按钮，收藏数量绑定 favoriteCount，我的发布区保留结构占位
+- `vue-tsc --noEmit` 零错误
+
+> **（无）**
+
+---
+
+### 最终验证
+
+> **
