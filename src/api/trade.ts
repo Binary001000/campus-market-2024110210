@@ -30,3 +30,6 @@ export function createTrade(data: TradeItem) {
 export function deleteTrade(id: number) {
   return http.delete(`/trades/${id}`)
 }
+export function updateTrade(id: number, data: Partial<TradeItem>) {
+  return http.patch<TradeItem>(`/trades/${id}`, data)
+}

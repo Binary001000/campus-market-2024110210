@@ -20,3 +20,10 @@ export function getGroupBuys() {
 export function createGroupBuy(data: GroupBuyItem) {
   return http.post<GroupBuyItem>('/groupBuys', data)
 }
+export function deleteGroupBuy(id: number) {
+  return http.delete(`/groupBuys/${id}`)
+}
+
+export function updateGroupBuy(id: number, data: Partial<GroupBuyItem>) {
+  return http.patch<GroupBuyItem>(`/groupBuys/${id}`, data)
+}

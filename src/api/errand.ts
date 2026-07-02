@@ -20,3 +20,10 @@ export function getErrands() {
 export function createErrand(data: ErrandItem) {
   return http.post<ErrandItem>('/errands', data)
 }
+export function deleteErrand(id: number) {
+  return http.delete(`/errands/${id}`)
+}
+
+export function updateErrand(id: number, data: Partial<ErrandItem>) {
+  return http.patch<ErrandItem>(`/errands/${id}`, data)
+}

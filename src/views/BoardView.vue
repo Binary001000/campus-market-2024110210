@@ -1,58 +1,100 @@
 <script setup lang="ts">
-// 数据看板 — 统计卡片 + 环形图 + 柱状图 + TOP5 + 时间线（纯静态展示）
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { WarningFilled } from '@element-plus/icons-vue'
+import { getTrades, type TradeItem } from '../api/trade'
+import { getGroupBuys, type GroupBuyItem } from '../api/groupBuy'
+import { getErrands, type ErrandItem } from '../api/errand'
+import { getLostFounds, type LostFoundItem } from '../api/lostFound'
+import { countByField } from '../utils/statistics'
 
 const timeRange = ref('today')
+const trades = ref<TradeItem[]>([])
+const groupBuys = ref<GroupBuyItem[]>([])
+const errands = ref<ErrandItem[]>([])
+const lostFounds = ref<LostFoundItem[]>([])
 
-interface StatItem {
-  label: string; value: number; unit: string; change: number; trend: 'up' | 'down'
-}
-const stats: StatItem[] = [
-  { label: '在售商品', value: 326, unit: '件', change: 12, trend: 'up' },
-  { label: '活跃用户', value: 1280, unit: '人', change: 8, trend: 'up' },
-  { label: '今日访问', value: 4567, unit: '次', change: 23, trend: 'up' },
-  { label: '成交订单', value: 89, unit: '单', change: 5, trend: 'down' },
-]
+const stats = computed(() => [
+  { label: '在售商品', value: trades.value.filter(t => t.status === 'open').length + groupBuys.value.filter(g => g.status === 'open').length, unit: '件', change: 12, trend: 'up' as const },
+  { label: '拼单活动', value: groupBuys.value.length, unit: '个', change: 8, trend: 'up' as const },
+  { label: '跑腿委托', value: errands.value.length, unit: '个', change: 23, trend: 'up' as const },
+  { label: '失物招领', value: lostFounds.value.length, unit: '条', change: 5, trend: 'down' as const },
+])
 
-const categories = [
-  { name: '教材教辅', count: 86, percent: 26, color: '#4a90d9' },
-  { name: '电子产品', count: 64, percent: 20, color: '#52c41a' },
-  { name: '生活用品', count: 58, percent: 18, color: '#faad14' },
-  { name: '运动户外', count: 42, percent: 13, color: '#eb2f96' },
-  { name: '服饰美妆', count: 39, percent: 12, color: '#722ed1' },
-  { name: '其他', count: 37, percent: 11, color: '#13c2c2' },
-]
+const totalActive = computed(() => trades.value.filter(t => t.status === 'open').length)
 
-const campusData = [
-  { name: '北校区', count: 128, percent: 39, color: '#4a90d9' },
-  { name: '南校区', count: 86, percent: 26, color: '#52c41a' },
-  { name: '东校区', count: 65, percent: 20, color: '#faad14' },
-  { name: '西校区', count: 47, percent: 15, color: '#eb2f96' },
-]
+const categories = computed(() => {
+  const counts = countByField(trades.value, 'category')
+  const total = trades.value.length || 1
+  return Object.entries(counts).map(([name, count], i) => ({
+    name,
+    count,
+    percent: Math.round((count / total) * 100),
+    color: (['#4a90d9', '#52c41a', '#faad14', '#eb2f96', '#722ed1', '#13c2c2'])[i % 6]!,
+  }))
+})
 
-const topItems = [
-  { rank: 1, title: '《数据结构》教材 9成新', hot: 86 },
-  { rank: 2, title: '机械键盘 Cherry 青轴', hot: 64 },
-  { rank: 3, title: '蓝牙耳机 降噪版', hot: 51 },
-  { rank: 4, title: '瑜伽垫 加厚防滑', hot: 42 },
-  { rank: 5, title: '台灯 LED 护眼', hot: 38 },
-]
+const campusData = computed(() => {
+  const counts = countByField(trades.value, 'campus')
+  const total = trades.value.length || 1
+  return Object.entries(counts).map(([name, count], i) => ({
+    name,
+    count,
+    percent: Math.round((count / total) * 100),
+    color: (['#4a90d9', '#52c41a', '#faad14', '#eb2f96'])[i % 4]!,
+  }))
+})
 
-const timeline = [
-  { time: '10 分钟前', text: '张同学发布了《数据结构》教材' },
-  { time: '25 分钟前', text: '李同学发布了机械键盘 Cherry 青轴' },
-  { time: '1 小时前', text: '王同学的台灯已标记为已完成' },
-  { time: '2 小时前', text: '赵同学收藏了考研英语真题集' },
-]
+const topItems = computed(() =>
+  [...trades.value]
+    .sort((a, b) => (b.id ?? 0) - (a.id ?? 0))
+    .slice(0, 5)
+    .map((item, i) => ({
+      rank: i + 1,
+      title: item.title,
+      hot: 100 - i * 15,
+    })),
+)
 
-// 排名颜色：金银铜 → 灰色
+const timeline = computed(() =>
+  [...trades.value]
+    .sort((a, b) => b.publishTime.localeCompare(a.publishTime))
+    .slice(0, 4)
+    .map((item) => ({
+      time: item.publishTime,
+      text: `${item.publisher} 发布了「${item.title}」`,
+    })),
+)
+
 const rankColor = (rank: number): string => {
   if (rank === 1) return '#f59e0b'
   if (rank === 2) return '#9ca3af'
   if (rank === 3) return '#cd7f32'
   return '#d1d5db'
 }
+
+const donutBackground = computed(() => {
+  if (categories.value.length === 0) return '#e5e7eb'
+  const parts = categories.value.map(
+    (c, i) => {
+      const start = categories.value.slice(0, i).reduce((s, x) => s + x.percent, 0)
+      return `${c.color} ${start}% ${start + c.percent}%`
+    },
+  )
+  return `conic-gradient(${parts.join(', ')})`
+})
+
+onMounted(async () => {
+  const [t, g, e, l] = await Promise.all([
+    getTrades().then(r => r.data),
+    getGroupBuys().then(r => r.data),
+    getErrands().then(r => r.data),
+    getLostFounds().then(r => r.data),
+  ])
+  trades.value = t
+  groupBuys.value = g
+  errands.value = e
+  lostFounds.value = l
+})
 </script>
 
 <template>
@@ -91,10 +133,10 @@ const rankColor = (rank: number): string => {
       <el-card class="chart-card" shadow="hover">
         <template #header><span class="chart-title">分类占比</span></template>
         <div class="donut-wrap">
-          <div class="donut-chart">
+          <div class="donut-chart" :style="{ background: donutBackground }">
             <div class="donut-center">
-              <span class="donut-total">326</span>
-              <span class="donut-sub">总商品数</span>
+              <span class="donut-total">{{ totalActive }}</span>
+              <span class="donut-sub">在售商品</span>
             </div>
           </div>
           <div class="donut-legend">
@@ -278,14 +320,6 @@ const rankColor = (rank: number): string => {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: conic-gradient(
-    #4a90d9 0% 26%,
-    #52c41a 26% 46%,
-    #faad14 46% 64%,
-    #eb2f96 64% 77%,
-    #722ed1 77% 89%,
-    #13c2c2 89% 100%
-  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -451,5 +485,15 @@ const rankColor = (rank: number): string => {
   font-size: 13px;
   color: #a16207;
   line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .board-header { flex-direction: column; gap: 12px; align-items: flex-start; }
 }
 </style>

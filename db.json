@@ -94,6 +94,7 @@
       "location": "一食堂二楼",
       "eventTime": "2026-06-22 12:10",
       "contact": "站内消息联系",
+      "publisher": "校园用户",
       "status": "open",
       "description": "校园卡卡套为黑色，上面有姓名贴纸，卡号后四位 3821。"
     },
@@ -105,6 +106,7 @@
       "location": "教学楼 A 区 302 教室",
       "eventTime": "2026-06-22 18:40",
       "contact": "站内消息联系",
+      "publisher": "张同学",
       "status": "open",
       "description": "深蓝色自动折叠伞，放在 A 区一楼值班室，请失主尽快认领。"
     },
@@ -116,6 +118,7 @@
       "location": "图书馆三楼阅览室",
       "eventTime": "2026-06-23 15:00",
       "contact": "站内消息联系",
+      "publisher": "校园用户",
       "status": "open",
       "description": "白色 AirPods Pro 充电盒，有蓝色保护壳，可能在 3 楼靠窗座位附近。"
     },
@@ -127,6 +130,7 @@
       "location": "操场跑道旁长椅",
       "eventTime": "2026-06-24 07:30",
       "contact": "站内消息联系",
+      "publisher": "张同学",
       "status": "open",
       "description": "三把钥匙加一个哆啦A梦挂件，暂存于体育馆服务台。"
     },
@@ -138,6 +142,7 @@
       "location": "二食堂一楼",
       "eventTime": "2026-06-25 12:00",
       "contact": "站内消息联系",
+      "publisher": "李同学",
       "status": "open",
       "description": "品牌 Jansport，包内有教材《计算机网络》和笔袋。"
     }
@@ -196,7 +201,7 @@
       "title": "当季水果拼单团购",
       "type": "拼购",
       "targetCount": 10,
-      "currentCount": 5,
+      "currentCount": 6,
       "deadline": "2026-06-29 12:00",
       "location": "线上拼团",
       "publisher": "西校区 李同学",
@@ -264,6 +269,131 @@
       "publisher": "南校区 赵同学",
       "status": "open",
       "description": "帮忙去信息中心取号排队补办校园卡，办好后送到宿舍楼下。"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "校园用户",
+      "college": "计算机学院",
+      "grade": "2023 级",
+      "avatar": "",
+      "bio": "热爱校园生活，喜欢分享闲置好物。"
+    },
+    {
+      "id": 2,
+      "name": "张同学",
+      "college": "软件学院",
+      "grade": "2023 级",
+      "avatar": "",
+      "bio": "二手交易达人"
+    },
+    {
+      "id": 3,
+      "name": "李同学",
+      "college": "数学学院",
+      "grade": "2023 级",
+      "avatar": "",
+      "bio": ""
+    },
+    {
+      "name": "666",
+      "college": "666",
+      "grade": "2024",
+      "avatar": "",
+      "bio": "",
+      "id": 4
+    }
+  ],
+  "favorites": [],
+  "conversations": [
+    {
+      "id": 1,
+      "participants": [
+        1,
+        2
+      ],
+      "itemType": "trade",
+      "itemId": 1,
+      "lastMessage": "你好，请问还在吗？",
+      "lastTime": "2026-06-26 14:30:00",
+      "unreadCount": 0
+    },
+    {
+      "id": 2,
+      "participants": [
+        1,
+        3
+      ],
+      "itemType": "groupBuy",
+      "itemId": 2,
+      "lastMessage": "好的，我加入拼单",
+      "lastTime": "2026-06-26 15:00:00",
+      "unreadCount": 0
+    }
+  ],
+  "messages": [
+    {
+      "id": 1,
+      "conversationId": 1,
+      "senderId": 2,
+      "content": "你好，请问机械键盘还在吗？",
+      "createdAt": "2026-06-26 14:00:00"
+    },
+    {
+      "id": 2,
+      "conversationId": 1,
+      "senderId": 1,
+      "content": "还在的，你要看看吗？",
+      "createdAt": "2026-06-26 14:15:00"
+    },
+    {
+      "id": 3,
+      "conversationId": 1,
+      "senderId": 2,
+      "content": "你好，请问还在吗？",
+      "createdAt": "2026-06-26 14:30:00"
+    },
+    {
+      "id": 4,
+      "conversationId": 2,
+      "senderId": 1,
+      "content": "四六级真题还有位置吗？",
+      "createdAt": "2026-06-26 14:45:00"
+    },
+    {
+      "id": 5,
+      "conversationId": 2,
+      "senderId": 3,
+      "content": "还有 3 个位置，欢迎加入",
+      "createdAt": "2026-06-26 14:50:00"
+    },
+    {
+      "id": 6,
+      "conversationId": 2,
+      "senderId": 1,
+      "content": "好的，我加入拼单",
+      "createdAt": "2026-06-26 15:00:00"
+    }
+  ],
+  "notices": [
+    {
+      "id": 1,
+      "userId": 1,
+      "type": "system",
+      "title": "欢迎使用校园集市",
+      "content": "欢迎注册校园集市平台，在这里你可以交易闲置、发起拼单、发布跑腿任务等。",
+      "read": false,
+      "createdAt": "2026-06-20 00:00:00"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "type": "system",
+      "title": "发布功能已上线",
+      "content": "现在你可以在平台上发布二手交易、失物招领、拼单搭子和跑腿委托信息。",
+      "read": false,
+      "createdAt": "2026-06-21 00:00:00"
     }
   ]
 }

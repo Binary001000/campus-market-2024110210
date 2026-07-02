@@ -20,3 +20,10 @@ export function getLostFounds() {
 export function createLostFound(data: LostFoundItem) {
   return http.post<LostFoundItem>('/lostFounds', data)
 }
+export function deleteLostFound(id: number) {
+  return http.delete(`/lostFounds/${id}`)
+}
+
+export function updateLostFound(id: number, data: Partial<LostFoundItem>) {
+  return http.patch<LostFoundItem>(`/lostFounds/${id}`, data)
+}
