@@ -4,7 +4,15 @@
       <h1>消息中心</h1>
     </div>
 
-    <div class="message-layout">
+    <div v-if="!userStore.isLoggedIn" class="not-logged-in">
+      <div class="icon-wrap">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-4.8 0-8.4 2.1-8.4 4.8v2.4h16.8v-2.4c0-2.7-3.6-4.8-8.4-4.8z"/></svg>
+      </div>
+      <p class="not-logged-in-text">请先登录后再查看消息</p>
+      <el-button type="primary" size="large" @click="openLogin">去登录</el-button>
+    </div>
+
+    <div v-else class="message-layout">
       <div class="conv-panel">
         <div class="conv-search">
           <el-input
@@ -108,6 +116,14 @@ import { useMessageStore } from '../stores/message'
 import { useUserStore } from '../stores/user'
 import { getMockReplyAsync } from '../utils/mockReply'
 
+function openLogin() {
+  const header = document.querySelector('.app-header')
+  if (header) {
+    const btn = header.querySelector('.el-button--primary') as HTMLElement
+    btn?.click()
+  }
+}
+
 const route = useRoute()
 const messageStore = useMessageStore()
 const userStore = useUserStore()
@@ -198,6 +214,25 @@ watch(
 
 <style scoped>
 .message-page { max-width: 960px; }
+
+.not-logged-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  gap: 16px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.icon-wrap svg {
+  color: var(--text-tertiary, #9ca3af);
+}
+
+.not-logged-in-text {
+  font-size: 16px;
+  margin: 0;
+}
 
 .page-header { padding: 24px; border-radius: var(--radius-xl, 16px); background: var(--bg-card, #fff); margin-bottom: 16px; }
 .page-header h1 { margin: 0; font-size: 22px; color: var(--text-primary, #111827); }

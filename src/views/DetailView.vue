@@ -80,6 +80,10 @@ async function loadDetail() {
 }
 
 async function handleToggleFavorite() {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再收藏')
+    return
+  }
   if (!item.value?.id) return
   const favItem = {
     id: item.value.id,
@@ -91,6 +95,10 @@ async function handleToggleFavorite() {
 }
 
 async function handleContact() {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再联系卖家')
+    return
+  }
   if (!item.value?.id) return
   await messageStore.loadConversations()
   let conv = messageStore.conversations.find(
@@ -126,6 +134,10 @@ async function findUserIdByName(name: string): Promise<number | null> {
 }
 
 async function handleDelete() {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再删除')
+    return
+  }
   try {
     await ElMessageBox.confirm('确定删除？此操作不可撤销。', '确认删除', {
       confirmButtonText: '删除',
@@ -151,6 +163,10 @@ async function handleDelete() {
 }
 
 async function handleJoinGroupBuy() {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再参与拼单')
+    return
+  }
   if (!isGroupBuy.value || !groupBuyItem.value) return
   const gb = groupBuyItem.value
   if (gb.currentCount >= gb.targetCount) {
@@ -163,6 +179,10 @@ async function handleJoinGroupBuy() {
 }
 
 async function handleAcceptErrand() {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再接单')
+    return
+  }
   if (!isErrand.value || !errandItem.value) return
   await updateErrand(errandItem.value.id!, { status: 'done' })
   errandItem.value.status = 'done'
@@ -173,6 +193,10 @@ const bargainVisible = ref(false)
 const bargainPrice = ref(0)
 
 function openBargain() {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再砍价')
+    return
+  }
   if (!tradeItem.value) return
   bargainPrice.value = Math.round(tradeItem.value.price * 0.8)
   bargainVisible.value = true

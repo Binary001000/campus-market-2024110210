@@ -1447,3 +1447,53 @@ AI 修复了 6 个文件：
 ### 最终验证
 
 > **项目完整走查通过，具备 Day7 展示条件。**
+
+---
+
+## 协作记录 34 — Day 6 鉴权守卫 + UI 5 阶段美化 + 最终验证
+
+**日期**：2026-07-02
+
+---
+
+### Prompt
+
+```
+1. 越权操作守卫：
+   - PublishView / MessageView 页面级登录门禁（v-if="!userStore.isLoggedIn"）
+   - DetailView / ListView 操作级守卫（收藏/联系/删除/拼单/接单/砍价）
+2. UI 美化 Phase 1~5：
+   - Phase 1: CSS 变量补齐、SVG 收藏图标、DetailView padding
+   - Phase 2: AppNav 全部重写（8 项 SVG 图标 + hover 背景色 + 底部指示条）
+   - Phase 3: LostFound/GroupBuy/Errand 差异化页面设计
+   - Phase 4: PublishView 3 段卡片式布局
+   - Phase 5: MobileNav.vue 新建 + AppLayout 集成
+3. 最终 lint + type-check 验证
+```
+
+---
+
+### AI 输出概要
+
+- **守卫**：PublishView/MessageView 添加 `.not-logged-in` 门禁（SVG 图标 + 去登录按钮，点击触发 AppHeader 登录弹窗）；DetailView 6 个 handler 首行 `if (!userStore.isLoggedIn)` 守卫；ListView 同样守卫收藏
+- **UI Phase 1**：CSS 变量补齐 + SVG 收藏图标 + DetailView padding 修复
+- **UI Phase 2**：AppNav 全部重写（8 项 SVG + hover 背景 + active 指示条）
+- **UI Phase 3**：LostFound/GroupBuy/Errand 三色系差异化（渐变 header + 筛选 + 统计条）
+- **UI Phase 4**：PublishView 3 段卡片式（选择类型/基本信息/补充信息）
+- **UI Phase 5**：MobileNav.vue 新建 + AppLayout 集成 + mobile 安全区
+- **暗黑移除**：[data-theme='dark'] CSS 块 / toggle 按钮 / localStorage 全部删除
+- **死代码删除**：FormField.vue / ProfileView.vue / src/utils/theme.ts
+- **登录体系完善**：userStore localStorage 持久化 + AppHeader el-dialog 登录/注册 + UserCenterView 门禁
+- **验证**：type-check 0 errors / lint 0 warnings
+
+---
+
+### 自己修改
+
+> **无**
+
+---
+
+### 最终验证
+
+> **pnpm type-check 0 errors, pnpm lint 0 warnings, pnpm mock + pnpm dev 全流程可演示。**

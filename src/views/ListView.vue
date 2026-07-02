@@ -2,15 +2,18 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { getTrades, type TradeItem } from '../api/trade'
 import ItemCard from '../components/ItemCard.vue'
 import SkeletonCard from '../components/SkeletonCard.vue'
 import EmptyState from '../components/EmptyState.vue'
 import ErrorState from '../components/ErrorState.vue'
 import { useFavoriteStore } from '../stores/favorite'
+import { useUserStore } from '../stores/user'
 
 const route = useRoute()
 const favoriteStore = useFavoriteStore()
+const userStore = useUserStore()
 
 const items = ref<TradeItem[]>([])
 const loading = ref(true)
@@ -75,6 +78,10 @@ const pagedItems = computed(() => {
 })
 
 async function handleToggleFavorite(item: TradeItem) {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录后再收藏')
+    return
+  }
   if (!item.id) return
   await favoriteStore.toggleFavorite({
     id: item.id,

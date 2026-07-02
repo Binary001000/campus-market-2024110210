@@ -5,7 +5,16 @@
       <p>选择发布类型，填写必要信息，让校园需求更快被看见。</p>
     </div>
 
+    <div v-if="!userStore.isLoggedIn" class="not-logged-in">
+      <div class="icon-wrap">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-4.8 0-8.4 2.1-8.4 4.8v2.4h16.8v-2.4c0-2.7-3.6-4.8-8.4-4.8z"/></svg>
+      </div>
+      <p class="not-logged-in-text">请先登录后再发布信息</p>
+      <el-button type="primary" size="large" @click="openLogin">去登录</el-button>
+    </div>
+
     <el-form
+      v-else
       ref="formRef"
       :model="form"
       :rules="rules"
@@ -185,6 +194,14 @@ import { Plus } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { UploadFile } from 'element-plus'
 import { useUserStore } from '../stores/user'
+
+function openLogin() {
+  const header = document.querySelector('.app-header')
+  if (header) {
+    const btn = header.querySelector('.el-button--primary') as HTMLElement
+    btn?.click()
+  }
+}
 import { createTrade } from '../api/trade'
 import { createLostFound } from '../api/lostFound'
 import { createGroupBuy } from '../api/groupBuy'
@@ -334,6 +351,25 @@ async function handleSubmit() {
 
 <style scoped>
 .page { display: flex; flex-direction: column; gap: 20px; max-width: 720px; margin: 0 auto; }
+
+.not-logged-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  gap: 16px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.icon-wrap svg {
+  color: var(--text-tertiary, #9ca3af);
+}
+
+.not-logged-in-text {
+  font-size: 16px;
+  margin: 0;
+}
 
 .page-header {
   padding: 24px;
