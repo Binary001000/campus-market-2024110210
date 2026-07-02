@@ -3,6 +3,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { getTrades, type TradeItem } from '../api/trade'
+import LoadingState from '../components/LoadingState.vue'
+import ErrorState from '../components/ErrorState.vue'
 
 // 四类业务入口配置
 const entries = [
@@ -14,13 +16,20 @@ const entries = [
 
 // 数据驱动：从 API 获取二手商品数据用于首页展示
 const trades = ref<TradeItem[]>([])
+const hLoading = ref(true)
+const hError = ref(false)
 
-onMounted(async () => {
+async function loadHomeData() {
+  hLoading.value = true
+  hError.value = false
   try {
     const res = await getTrades()
     trades.value = res.data
-  } catch (e) { console.error(e) }
-})
+  } catch (e) { console.error(e); hError.value = true }
+  finally { hLoading.value = false }
+}
+
+onMounted(loadHomeData)
 
 // 统计数据：基于 API 实时数据计算
 const stats = computed(() => [
@@ -74,8 +83,17 @@ const hotItems = computed(() =>
       </div>
     </section>
 
+    <!-- 加载/错误状态 -->
+    <LoadingState v-if="hLoading" text="正在加载..." />
+    <ErrorState
+      v-else-if="hError"
+      message="数据加载失败，请检查 Mock 服务是否正常运行。"
+      show-retry
+      @retry="loadHomeData"
+    />
+
     <!-- C. 三列统计 -->
-    <section class="stat-section">
+    <section v-else class="stat-section">
       <div class="stat-grid">
         <div v-for="s in stats" :key="s.label" class="stat-card">
           <div class="stat-value">{{ s.value.toLocaleString() }}</div>

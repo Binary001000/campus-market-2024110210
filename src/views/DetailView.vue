@@ -3,6 +3,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getTradeById, deleteTrade, type TradeItem } from '../api/trade'
+import LoadingState from '../components/LoadingState.vue'
+import ErrorState from '../components/ErrorState.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -11,20 +13,25 @@ const itemId = Number(route.params.id)  // 从 URL 获取商品 ID
 // 状态管理
 const item = ref<TradeItem | null>(null)
 const loading = ref(true)
+const error = ref(false)
 const deleting = ref(false)
 const isFavorited = ref(false)
 
-// 加载商品详情
-onMounted(async () => {
+async function loadDetail() {
+  loading.value = true
+  error.value = false
   try {
     const res = await getTradeById(itemId)
     item.value = res.data
   } catch (e) {
     console.error('获取详情失败', e)
+    error.value = true
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(loadDetail)
 
 // 删除商品
 const handleDelete = async () => {
@@ -59,9 +66,15 @@ const statusLabels: Record<string, string> = { open: '进行中', closed: '已�
     </el-breadcrumb>
 
     <!-- 加载中 -->
-    <div v-if="loading" class="loading-wrap">
-      <p>加载中...</p>
-    </div>
+    <LoadingState v-if="loading" text="正在加载商品详情..." />
+
+    <!-- 错误 -->
+    <ErrorState
+      v-else-if="error"
+      message="详情加载失败，请检查 Mock 服务是否正常运行。"
+      show-retry
+      @retry="loadDetail"
+    />
 
     <!-- 不存在 -->
     <el-result

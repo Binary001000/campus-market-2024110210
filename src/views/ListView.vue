@@ -4,6 +4,8 @@ import { ref, computed, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { getTrades, type TradeItem } from '../api/trade'
 import EmptyState from '../components/EmptyState.vue'
+import ErrorState from '../components/ErrorState.vue'
+import LoadingState from '../components/LoadingState.vue'
 import { useFavoriteStore } from '../stores/favorite'
 
 const favoriteStore = useFavoriteStore()
@@ -11,17 +13,23 @@ const favoriteStore = useFavoriteStore()
 // 数据加载
 const items = ref<TradeItem[]>([])
 const loading = ref(true)
+const error = ref(false)
 
-onMounted(async () => {
+async function loadTrades() {
+  loading.value = true
+  error.value = false
   try {
     const res = await getTrades()
     items.value = res.data
   } catch (e) {
     console.error('获取数据失败', e)
+    error.value = true
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(loadTrades)
 
 // 筛选条件状态
 const searchQuery = ref('')
@@ -93,10 +101,15 @@ const pagedItems = computed(() => {
     </div>
 
     <!-- 加载中 -->
-    <div v-if="loading" class="loading-wrap">
-      <el-icon class="loading-icon"><Search /></el-icon>
-      <p>加载中...</p>
-    </div>
+    <LoadingState v-if="loading" text="正在加载二手商品..." />
+
+    <!-- 错误 -->
+    <ErrorState
+      v-else-if="error"
+      message="数据加载失败，请检查 Mock 服务是否正常运行。"
+      show-retry
+      @retry="loadTrades"
+    />
 
     <!-- 列表 -->
     <template v-else-if="pagedItems.length">

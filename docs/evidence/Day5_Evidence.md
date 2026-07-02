@@ -76,7 +76,7 @@ UserCenterView 在 onMounted 中通过 `Promise.all` 同时请求四类数据（
 ## 5. AI 协作记录
 
 ### 使用的 AI 工具
-Claude Code（DeepSeek v4 Pro）
+Claude Code（DeepSeek v4 Pro）+ opencode
 
 ### AI 生成内容
 - **user.ts**：AI 按 day5.txt 示例生成了用户 Store，使用 Options API 风格
